@@ -1,11 +1,12 @@
-#import "@preview/finite:0.5.0": automaton
-#import "@preview/finite:0.5.0"
+#import "@preview/showybox:2.0.4": showybox
 
 #set heading(numbering: "1.")
 #set text(14pt, font:("Libertinus Serif", "Source Han Serif SC"))
 
 #show heading.where(level: 1): set text(blue)
-#show heading.where(level: 2): set text(navy)
+#show heading.where(level: 2): set text(green)
+#show heading.where(level: 3): set text(purple)
+#show ref: it => {
   text(green, it)
 }
 #align(center)[
@@ -514,7 +515,7 @@ $ theta x_1 + \( 1 - theta \) x_2 in cal(C) \, quad forall x_1 \, x_2 in cal(C) 
     其中
     $B \( x \, r \) = { y in bb(R)^n : bar.v.double y - x bar.v.double < r }$.
   - 闭包定义为
-    $upright("cl") \( cal(C) \) = cal(C) union { x : x upright(" 是 ") cal(C) upright(" 的极限点") }$.
+    $upright("cl") \( cal(C) \) = cal(C) union { x : x "is the limit point of" cal(C) }$.
 
 === 凸组合和凸包
 形如
@@ -600,8 +601,27 @@ $ cal(K) = { \( x \, t \) in bb(R)^(n + 1) : bar.v.double x bar.v.double lt.eq t
   $ cal(S)_(+)^n = { X in cal(S)^n : X succ.curly.eq 0 } $
 
 这里 $X succ.curly.eq 0$ 表示矩阵 $X$ 是半正定的, 即对于任意非零向量
-$z in bb(R)^n$, 有 $z^T X z gt.eq 0$. 我们一般称 $cal(S)_(+)^n$ 为
-#strong[半正定锥 (Positive Semidefinite Cone)];, 它是一个凸锥.
+$z in bb(R)^n$, 有 $z^T X z gt.eq 0$. 
+
+我们一般称 $cal(S)_(+)^n$ 为 #strong[半正定锥 (Positive Semidefinite Cone)];, 它是一个凸锥.
+#showybox(
+  title: "对称矩阵的半正定序",
+  frame: (
+    border-color: blue,
+    title-color: blue.lighten(30%),
+    body-color: blue.lighten(95%),
+    footer-color: blue.lighten(80%)
+  ),
+  // footer: "Information extracted from a well-known public encyclopedia"
+)[
+  对称矩阵 $X \, Y in cal(S)^n$ 的 *半正定序 (Semidefinite Ordering)* 定义为
+  $ X succ.curly.eq Y quad <=> quad X - Y "is positive semidefinite" $
+  可以证明这是一个偏序 (Partial Order), 即对于任意 $X \, Y \, Z in cal(S)^n$, 有
+  - $X succ.curly.eq X$ (自反性)
+  - 如果 $X succ.curly.eq Y$ 且 $Y succ.curly.eq X$, 则 $X = Y$ (反对称性)
+  - 如果 $X succ.curly.eq Y$ 且 $Y succ.curly.eq Z$, 则 $X succ.curly.eq Z$ (传递性)
+]
+
 
 - #strong[正定矩阵集合];: 设 $cal(S)_(+ +)^n$ 表示所有 $n times n$
   实对称正定矩阵的集合, 即
@@ -618,5 +638,139 @@ $ f \( cal(C) \) = { f \( x \) : x in cal(C) } "is convex if" cal(C) "is convex"
   
 $ f^(- 1) \( cal(D) \) = { x : f \( x \) in cal(D) } "is convex if" cal(D) "is convex" $
 
-#strong[例子];, 对于双曲锥
-$ cal(C) = { \( x \, t \) in bb(R)^(n + 1) : bar.v.double x bar.v.double_2^2 lt.eq t u \, thin t gt.eq 0 \, thin u gt.eq 0 } $
+*例子*:
+1. 线性矩阵不等式的解集
+$
+  {x | x_1A_1 + x_2A_2 + dots.h.c + x_m A_m prec.curly.eq B}
+$
+当 $A_i \, B in cal(S)^m$ 时, 是凸集. 这可以直接由仿射变换的保凸性得到.
+
+2. 双曲锥
+$
+  {x | x^T P x lt.eq (c^T x)^2 , c^T x gt.eq 0}
+$
+当 $P in cal(S)_(+)^n$ 时, 是凸锥. 这是因为双曲锥可以转化为二阶锥
+$
+  {x | bar.v.double A x bar.v.double_2 lt.eq c^T x , c^T x gt.eq 0, A^T A = P}
+$
+而二阶锥又可以通过二次锥 ${(x, t) | bar.v.double x bar.v.double_2 lt.eq t , t gt.eq 0}$ 通过仿射变换得到.
+
+=== 透视变换和分式线性变换的保凸性
+- *透视变换* $P : bb(R)^(n + 1) -> bb(R)^(n)$ 定义为:
+$
+  P \( z \) = P \( \( x \, t \) \) = frac(x, t) , quad "dom" P = { \( x \, t \) : t gt.eq 0 }
+$
+这里 $"dom" P$ 表示 $P$ 的定义域. 透视变换下凸集的像和原像都是凸集.
+
+- *分式线性变换* $f : bb(R)^n -> bb(R)^m$ 定义为:
+$
+  f \( x \) = frac(A x + b, c^T x + d) , quad "dom" f = { x : c^T x + d gt.eq 0 }
+$
+分式线性变换下凸集的像和原像都是凸集.
+
+== 广义不等式与对偶锥
+=== 适当锥
+我们知道锥是凸集, 一个凸锥 $K subset RR^n$ 是适当锥, 当其还满足
+1. $K$ 是闭集
+2. $K$ 是实心的, 即 $"int" K eq.not emptyset$
+3. $K$ 是尖的, 即内部不包含直线, 即如果 $x in K$ 且 $- x in K$, 则 $x = 0$.
+
+
+#showybox(
+  title: "闭集和内部",
+  frame: (
+    border-color: blue,
+    title-color: blue.lighten(30%),
+    body-color: blue.lighten(95%),
+    footer-color: blue.lighten(80%)
+  ),
+)[
+  - 集合 $cal(C)$ 是 *闭集*, 如果对于任意收敛到 $x$ 的点列 ${ x_k }$,
+    $ forall k, x_k in cal(C) => x in cal(C). $
+  - 集合 $cal(C)$ 的 *内部* 定义为
+    $ "int" cal(C) = { x in cal(C) : quad exists r gt 0 , B \( x \, r \) subset.eq cal(C) } $
+    这里 $B \( x \, r \) = { y in bb(R)^n : bar.v.double y - x bar.v.double < r }$.
+]
+
+适当锥的例子有:
+1. 非负卦限 $bb(R)_+^n = { x in bb(R)^n : x_i gt.eq 0 \, i = 1 \, 2 \, dots.h \, n }$
+2. 半正定锥 $K in cal(S)_(+)^n$
+3. $[0, 1]$ 上的有限非负多项式
+$
+  { p \( t \) = sum_(i = 0)^n p_i t^i |  p \( t \) gt.eq 0 , quad forall t in \[ 0 \, 1 \] }
+$
+
+=== 广义不等式
+广义不等式是一种偏序 (不必要保证所有对象都具有可比较性), 可以使用适当锥诱导. 对于适当锥 $K subset RR^n$, 定义广义不等式
+$ 
+x lt.eq_K y quad <=> quad y - x in K 
+$
+严格广义不等式定义为
+$
+x lt._K y quad <=> quad y - x in "int" K
+$
+
+*例子* 坐标分量不等式: $ x lt.eq_(RR_+^n) y quad <=> quad x_i lt.eq y_i \, i = 1 \, 2 \, dots.h \, n $
+
+*性质*
+1. 自反性: $x lt.eq_K x$
+2. 反对称性: 如果 $x lt.eq_K y$ 且 $y lt.eq_K x$, 则 $x = y$
+3. 传递性: 如果 $x lt.eq_K y$ 且 $y lt.eq_K z$, 则 $x lt.eq_K z$
+4. 保持加法: 如果 $x lt.eq_K y$, 则 $x + z lt.eq_K y + z$
+5. 保持非负数乘法: 如果 $x lt.eq_K y$ 且 $alpha gt.eq 0$, 则 $alpha x lt.eq_K alpha y$
+
+=== 对偶锥
+令锥 $K subset Omega$, 则 $K$ 的对偶锥定义为
+$
+K^* = { y in Omega : angle.l x, y angle.r gt.eq 0 , quad forall x in K }
+$
+
+对偶锥是相对于锥 $K$ 定义的, 我们把对偶锥为自身的锥称为 *自对偶锥 (Self-dual Cone)*.
+
+*例子*
+1. 非负卦限 $bb(R)_+^n$ 是自对偶锥. 这是显然的.
+2. 半正定锥 $cal(S)_(+)^n$ 是自对偶锥.
+
+#showybox(
+  title: "证明: 半正定锥是自对偶锥",
+  frame: (
+    border-color: green,
+    title-color: green.lighten(30%),
+    body-color: green.lighten(95%),
+    footer-color: green.lighten(80%)
+  ),
+  footer: [注: 对于 $X in cal(S)_(+)^n$, 可分解为 $X = Q Lambda Q^T$, 其中 $Lambda = "diag"(lambda_1, ..., lambda_n)$. 由此我们可以定义 $X^(1/2) = Q Lambda^(1/2) Q^T in cal(S)_(+)^n$]
+)[
+  第一步, 证明 $cal(S)_(+)^n subset.eq (cal(S)_(+)^n)^*$. 对任意 $X in cal(S)_(+)^n$ 和 $Y in cal(S)_(+)^n$, 有 $angle.l X, Y angle.r = tr \( X Y \) = tr \( Y^(1 \/ 2) X Y^(1 \/ 2) \) gt.eq 0$. (利用迹的循环不变性);
+
+  第二步, 证明 $(cal(S)_(+)^n)^* subset.eq cal(S)_(+)^n$. 设 $Z in (cal(S)_(+)^n)^*$, 则对于任意 $Y in cal(S)_(+)^n$, 有 $angle.l Z, Y angle.r = tr \( Z Y \) gt.eq 0$. 假设 $Z in.not cal(S)_(+)^n$, 则存在 $u in bb(R)^n$ 使得 $u^T Z u lt 0$. 令 $Y = u u^T$, 则 $Y in cal(S)_(+)^n$, 但 $angle.l Z, Y angle.r = tr \( Z u u^T \) = u^T Z u lt 0$, 矛盾. 因此, $Z in cal(S)_(+)^n$.
+]
+
+3. 锥 $K = {(x, t) | bar.v.double x bar.v.double_p lt.eq t , t gt.eq 0, p >= 1}$ 的对偶锥为 $ K^* = {(y, s) | bar.v.double y bar.v.double_q lt.eq s , s gt.eq 0, (p, q) "are dual"}. $ 因此二次锥 ($p = 2$) 是自对偶锥.
+
+
+#showybox(
+  title: "对偶范数",
+  frame: (
+    border-color: blue,
+    title-color: blue.lighten(30%),
+    body-color: blue.lighten(95%),
+    footer-color: blue.lighten(80%) 
+  ),
+)[
+  设 $bar.v.double dot.op bar.v.double$ 是 $bb(R)^n$ 上的某种范数, 则其 *对偶范数* 定义为
+  $
+  bar.v.double y bar.v.double_(*) = sup_(bar.v.double x bar.v.double lt.eq 1) angle.l x, y angle.r = sup_(bar.v.double x bar.v.double lt.eq 1) x^T y
+  $
+ 这里的 $y$ 定义在原范数的对偶空间中, 对于 $bb(R)^n$ 来说, 对偶空间仍然是 $bb(R)^n$.
+
+ *Hölder 不等式* 给出了范数与其对偶范数之间的关系:
+  $ 
+  angle.l x, y angle.r lt.eq bar.v.double x bar.v.double bar.v.double y bar.v.double_(*)
+  $
+
+ 特别地, 对于 $ell_p$ 范数, 其对偶范数为 $ell_q$ 范数, 其中 $frac(1, p) + frac(1, q) = 1$. 这是 Hölder 不等式的一个推论
+ $
+  angle.l x, y angle.r lt.eq bar.v.double x bar.v.double_p bar.v.double y bar.v.double_q, quad frac(1, p) + frac(1, q) = 1
+ $
+]
