@@ -774,3 +774,150 @@ $
   angle.l x, y angle.r lt.eq bar.v.double x bar.v.double_p bar.v.double y bar.v.double_q, quad frac(1, p) + frac(1, q) = 1
  $
 ]
+
+=== 对偶锥的性质
+设 $K$ 是一个锥, $K^*$ 是其对偶锥, 则
+1. $K^*$ 是锥
+2. $K^*$ 是闭集, 且是凸集
+3. 若 $"int" K^* eq.not emptyset$, 则 $K^*$ 是尖的, 即内部不含有直线
+4. 若 $K$ 的闭包是尖的, 则 $K^*$ 是实心的, 即 $"int" K^* eq.not emptyset$
+5. 若 $K$ 是适当锥, 则 $K^*$ 也是适当锥
+6. $K^(**)$ 是 $K$ 的凸包. 特别地, 若 $K$ 是凸且闭的, 则 $K^(**) = K$.
+
+=== 对偶锥诱导的广义不等式
+既然适当锥的对偶锥仍是适当锥, 则可以使用对偶锥诱导广义不等式. 设 $K$ 是适当锥, 则 $K^*$ 诱导的广义不等式定义为
+$ 
+x lt.eq_(K^*) y quad <=> quad y - x in K^*
+$
+使用对偶广义不等式的好处是, 对偶锥始终是闭且凸的, 并可将一个偏序问题转换为满足一个偏序条件的全序问题.
+
+== 分离超平面定理
+=== 定理陈述
+超平面是空间中一类特殊的凸集, 可以证明 $RR^n$ 空间中的超平面恰好是 $n - 1$ 维的. 我们可以用超平面分离不相交的凸集:
+
+如果 $cal(C)$ 和 $cal(D)$ 是不相交的凸集, 则存在超平面将它们分开 (*软划分*), 即存在一个线性函数 $f(x) = a^T x + b$ 使得
+$
+  f(x) cases(
+    <= 0 & quad forall x in cal(C) \
+    >= 0 & quad forall x in cal(D)
+  )
+$
+
+如果有任何一个集合不是凸集, 我们无法使用超平面对其划分, 而必须使用更加复杂的平面. 这就给划分问题带来了巨大的挑战.
+=== 严格分离定理
+如果 $cal(C)$ 和 $cal(D)$ 是不相交的凸集, 且 $cal(C)$ 是闭集, $cal(D)$ 是紧集, 则存在超平面将它们严格分开 (*硬划分*), 即存在一个线性函数 $f(x) = a^T x + b$ 使得
+$
+  f(x) cases(
+    < 0 & quad forall x in cal(C) \
+    > 0 & quad forall x in cal(D)
+  )
+$
+该定理的退化形式即 $cal(D)$ 退化为单点集 $x_0$, 则存在超平面将 $x_0$ 与闭凸集 $cal(C)$ 严格分开.
+
+=== 支撑超平面
+上述严格分离定理的退化形式要求 $x_0 in.not cal(C)$. 而当 $x_0$ 恰好落在 $cal(C)$ 的边界上时, 我们可以构造超平面:
+
+给定集合 $cal(C)$ 以及其边界上的点 $x_0$, 如果 $a != 0$ 满足对 $forall x in cal(C)$, 有 $a^T x <= a^T x_0$, 那么称集合
+$
+  cal(H) = { x : a^T x = a^T x_0 }
+$
+为 $cal(C)$ 在点 $x_0$ 处的 *支撑超平面*. 
+
+=== 支撑超平面定理
+如果 $cal(C)$ 是凸集, 则对于 $cal(C)$ 边界上的任意点 $x_0$, 都存在支撑超平面.
+
+== 凸函数的数学准备
+=== 梯度
+给定函数 $f: RR^n -> RR$, 且 $f$ 在 $x$ 的一个邻域内有意义, 若存在向量 $g in RR^n$ 满足
+$
+  lim_(p -> 0) (f(x + p) - f(x) - g^T p)/(bar.v.double p bar.v.double) = 0
+$
+其中 $bar.v.double dot.op bar.v.double$ 是某种范数, 则称 $f$ 在点 $x$ 处是 *Fréchet 可微*, 向量 $g$ 称为 $f$ 在点 $x$ 处的 *梯度*, 记为 $nabla f(x)$.
+
+特别地, 若我们把 $p$ 写成 $p = t bold(u)_i$, 其中 $t in RR$ 是标量, $bold(u)_i in RR^n$ 是单位向量, 则有
+$
+  nabla f(x)^T bold(u)_i = lim_(t -> 0) (f(x + t bold(u)_i) - f(x))/t = (partial f(x))/(partial x_i)
+$
+从而
+$
+  nabla f(x) = [(partial f(x))/(partial x_1) , (partial f(x))/(partial x_2) , dots.h.c , (partial f(x))/(partial x_n)]^T.
+$
+
+=== Hessian 矩阵
+如果函数 $f(x): RR^n -> RR$ 在点 $x$ 处是 Fréchet 可微的, 且其梯度 $nabla f(x)$ 在点 $x$ 处也是 Fréchet 可微的, 则称 $f$ 在点 $x$ 处是 *二阶 Fréchet 可微*, 此时定义 $f$ 在点 $x$ 处的 *Hessian 矩阵* 为
+$
+nabla^2 f(x) =
+mat(delim: "[", (diff^2 f(x))/(diff x_1^2), (diff^2 f(x))/(diff x_1 diff x_2), (diff^2 f(x))/(diff x_1 diff x_3), dots.c, (diff^2 f(x))/(diff x_1 diff x_n);
+(diff^2 f(x))/(diff x_2 diff x_1), (diff^2 f(x))/(diff x_2^2), (diff^2 f(x))/(diff x_2 diff x_3), dots.c, (diff^2 f(x))/(diff x_2 diff x_n);
+dots.v, dots.v, dots.v, dots.down, dots.v;
+(diff^2 f(x))/(diff x_n diff x_1), (diff^2 f(x))/(diff x_n diff x_2), (diff^2 f(x))/(diff x_n diff x_3), dots.c, (diff^2 f(x))/(diff x_n^2)).
+$
+若 $nabla^2 f(x)$ 在 $D$ 的每一点都存在, 则称 $f$ 在 $D$ 上是二阶 Fréchet 可微的. 如果 $nabla^2 f(x)$ 还在 $D$ 上连续, 则称 $f$ 在 $D$ 上是二阶连续 Fréchet 可微的, 此时可以证明 Hessian 矩阵是对称的, 即 $nabla^2 f(x) = (nabla^2 f(x))^T$.
+
+=== 矩阵变量函数的导数
+多元函数梯度的定义可以推广到变量是矩阵的情形, 对于 函数 $f: RR^(m times n) -> RR$, 若存在矩阵 $G in RR^(m times n)$ 满足
+$
+  lim_(bar.v.double V bar.v.double -> 0) (f(X + P) - f(X) - angle.l G, V angle.r )/(bar.v.double V bar.v.double) = 0,
+$
+其中 $bar.v.double dot.op bar.v.double$ 是某种矩阵范数, $angle.l A, B angle.r = tr(A^T B)$, 则称 $f$ 在点 $X$ 处是 *Fréchet 可微*, 矩阵 $G$ 称为 $f$ 在点 $X$ 处的 *梯度*, 记为 $nabla f(X)$. 令 $x_(i j)$ 为矩阵 $X$ 的第 $i$ 行第 $j$ 列元素, 则
+$
+  (nabla f(X))_(i j) = (partial f(X))/(partial x_(i j)).
+$
+
+在实际应用中, 矩阵 Fréchet 可微的概念并不常用, 我们需要介绍另一种定义, 即 Gâteaux 可微. 对于函数 $f: RR^(m times n) -> RR$, 若存在矩阵 $G in RR^(m times n)$ 满足
+$
+  lim_(t -> 0) (f(X + t V) - f(X))/t = angle.l G, V angle.r , quad forall V in RR^(m times n)
+$
+则称 $f$ 在点 $X$ 处是 *Gâteaux 可微*, 矩阵 $G$ 称为 $f$ 在点 $X$ 处的 *梯度*, 记为 $nabla f(X)$. 这里 $V$ 可以被看做是 $X$ 的一个 *方向*.
+
+可以证明, 如果 $f$ 在点 $X$ 处是 Fréchet 可微的, 则 $f$ 在点 $X$ 处也是 Gâteaux 可微的, 且两者的梯度相同. 反之, 如果 $f$ 在点 $X$ 处是 Gâteaux 可微的, 且 $nabla f(X)$ 在 $X$ 的某个邻域内连续, 则 $f$ 在点 $X$ 处也是 Fréchet 可微的, 且两者的梯度相同.
+
+*矩阵变量函数的导数的例子*
+1. 对于线性函数 $f(X) = tr(A X^T B)$, 其中 $A in RR^(p times m)$, $B in RR^(n times q)$, 有
+$
+  lim_(t -> 0) (f(X + t V) - f(X))/t = tr(A V^T B) = angle.l B A, V angle.r , quad forall V in RR^(m times n)
+$
+因此 $nabla f(X) = B A^T$.
+
+2. 对于二次函数 $f(X) = 1/2 bar.v.double X - A bar.v.double_F^2 = 1/2 tr((X - A)(X - A)^T)$, 其中 $A in RR^(m times n)$. 取任意方向 $V$ 以及充分小的 $t in RR$, 有
+$
+  f(X + t V) - f(X) &= 1/2 tr((X + t V - A)(X + t V - A)^T) - 1/2 tr((X - A)(X - A)^T) \
+  &= 1/2 tr(t^2 V V^T + t (X - A) V^T + t V (X - A)^T) \
+  &= t tr((X - A) V^T) + cal(O)(t^2) \
+  &= t angle.l X - A, V angle.r + cal(O)(t^2)
+$
+所以有 $nabla f(X) = X - A$.
+
+=== 广义实值函数与适当函数
+令 $macron(RR) = RR union {plus.minus oo}$ 为广义实数空间, 则映射 $f: RR^n -> macron(RR)$ 称为 *广义实值函数*. 
+
+给定广义实值函数 $f$ 和非空集合 $cal(X)$, 如果存在 $x in cal(X)$ 使得 $f(x) < + oo$, 并且对任意的 $x in cal(X)$, 都有 $f(x) > - oo$, 则称 $f$ 在 $cal(X)$ 上是 *适当的 (Proper)*.
+概括来说, 适当函数 $f$ 的特点是 "至少有一处取值不为正无穷" 且 "处处取值不为负无穷".
+
+=== 下水平集与上方图
+对于广义实值函数 $f: RR^n -> macron(RR)$, 定义其 $alpha$-*下水平集 (Lower Level Set)* 为
+$
+  cal(C)_alpha = { x in RR^n : f(x) lt.eq alpha } 
+$
+
+对于广义实值函数 $f: RR^n -> macron(RR)$, 定义其 *上方图 (Epigraph)* 为
+$
+  "epi" f = { (x, t) in RR^(n + 1) : f(x) lt.eq t }
+$
+
+=== 闭函数
+对于广义实值函数 $f: RR^n -> macron(RR)$, 如果其上方图是闭集, 则称 $f$ 在 $RR^n$ 上是 *闭函数 (Closed Function)*.
+
+=== 下半连续函数
+设广义实值函数 $f: RR^n -> macron(RR)$, 如果对于任意点 $x in RR$, 
+$
+  liminf_(y -> x) f(y) >= f(x)
+$
+则称 $f$ 在 $RR^n$ 上是 *下半连续 (Lower Semicontinuous)* 的. 这里 $liminf$ 表示下极限, 即
+$  liminf_(y -> x) f(y) = lim_(epsilon -> 0^+) (inf_(bar.v.double y - x bar.v.double lt.eq epsilon) f(y)) $
+
+设广义实值函数 $f: RR^n -> macron(RR)$, 则下列命题等价:
+1. $f(x)$ 的任意 $alpha$-下水平集 $cal(C)_alpha$ 都是闭集
+2. $f(x)$ 是下半连续的
+3. $f(x)$ 是闭函数
+
