@@ -249,7 +249,7 @@ $ L = { x divides x "the third-to-last character of" x "is 1" } $
 这种能力使得 $epsilon$-NFA 在某些情况下更容易设计和理解.
 
 我们可以通过以下步骤将一个 $epsilon$-NFA 转换为一个等价的 NFA: 
-1. #strong[计算 $epsilon$-闭包];: 对于每个状态 $q in Q$, 计算其 $epsilon$-闭包 $E \( q \)$, 即从状态 $q$ 出发, 通过任意数量的 $epsilon$ 转移可以到达的所有状态集合. 
+1. #strong[计算 $epsilon$-闭包];: 对于每个状态 $q in Q$, 计算其 $epsilon$-闭包 $E \( q \)$, 即从状态 $q$ 出发, 通过任意数量的 $epsilon$ 转移可以到达的所有状态集合 (包含 $q$ 自己). 
 2. #strong[定义新的状态转移函数];: 对于每个状态 $q in Q$ 和输入符号 $a in Sigma$, 定义新的状态转移函数 $delta'$: $ delta' \( q \, a \) = union.big_(p in E \( q \)) delta \( p \, a \) $ 这表示从状态 $q$ 出发, 通过 $epsilon$ 转移到达的所有状态 $p$,
 然后读取输入符号 $a$ 后可以到达的所有状态集合. 
 3. #strong[定义新的接受状态];: 定义新的接受状态集合 $F'$: $ F' = { q in Q divides E \( q \) inter F eq.not nothing } $ 这表示如果从状态 $q$ 出发, 通过 $epsilon$ 转移可以到达至少一个接受状态, 则 $q$ 也是一个接受状态. 
