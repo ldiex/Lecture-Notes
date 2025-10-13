@@ -2,6 +2,7 @@
 
 #set heading(numbering: "1.")
 #set text(14pt, font:("Libertinus Serif", "Source Han Serif SC"))
+#set page(numbering: "1")
 
 #show heading.where(level: 1): set text(blue)
 #show heading.where(level: 2): set text(green)
