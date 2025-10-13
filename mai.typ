@@ -921,3 +921,11 @@ $  liminf_(y -> x) f(y) = lim_(epsilon -> 0^+) (inf_(bar.v.double y - x bar.v.do
 2. $f(x)$ 是下半连续的
 3. $f(x)$ 是闭函数
 
+== 凸函数的定义与性质
+=== 凸函数的定义
+设 $f: RR^n -> RR$ 为适当函数, 如果 $"dom" f$ 是凸集, 且
+$
+  f(theta x + (1 - theta) y) lt.eq theta f(x) + (1 - theta) f(y), quad forall x, y in "dom" f, quad forall theta in \[ 0 \, 1 \]
+$
+则称 $f$ 为 *凸函数 (Convex Function)*. 如果上述不等式中的 "$lt.eq$" 替换为 "$<$", 则称 $f$ 为 *严格凸函数 (Strictly Convex Function)*. 如果上述不等式中的 "$lt.eq$" 替换为 "$gt.eq$", 则称 $f$ 为 *凹函数 (Concave Function)*.
+
