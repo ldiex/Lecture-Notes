@@ -930,3 +930,73 @@ $
 $
 则称 $f$ 为 *凸函数 (Convex Function)*. 如果上述不等式中的 "$lt.eq$" 替换为 "$<$", 则称 $f$ 为 *严格凸函数 (Strictly Convex Function)*. 如果上述不等式中的 "$lt.eq$" 替换为 "$gt.eq$", 则称 $f$ 为 *凹函数 (Concave Function)*.
 
+=== 一元凸函数的例子
+- 仿射函数 $f(x) = a x + b$, 其中 $a, b in RR$.
+- 指数函数 $f(x) = e^(a x)$, 其中 $a in RR$.
+- 幂函数 $f(x) = x^a$, 其中 $a >= 1$ 或 $a <= 0$, 定义域为 $RR_+$.
+- 绝对值的幂函数 $f(x) = |x|^a$, 其中 $a >= 1$ 或 $a <= 0$, 定义域为 $RR$.
+- 负熵函数 $f(x) = x log x$, 定义域为 $RR_+$, 其中 $0 log 0 = 0$.
+
+=== 多元凸函数的例子
+欧式空间 $RR^n$ 中的例子:
+- 仿射函数 $f(x) = a^T x + b$, 其中 $a in RR^n$, $b in RR$.
+- $p$-范数函数 $f(x) = bar.v.double x bar.v.double_p$, 其中 $p >= 1$. 特别地, $p -> oo$ 时, $f(x) = max_i |x_i|$.
+
+矩阵空间 $RR^(m times n)$ 中的例子:
+- 仿射函数 $f(X) = tr(A X^T) + b = sum_(i = 1)^m sum_(j = 1)^n a_(i j) x_(i j) + b$, 其中 $A in RR^(m times n)$, $b in RR$.
+- 谱范数函数 $f(X) = bar.v.double X bar.v.double_2 = sigma_max (X) = (lambda_max (X^T X))^(1/2)$, 其中 $sigma_max (X)$ 表示矩阵 $X$ 的最大奇异值, $lambda_max (X)$ 表示矩阵 $X$ 的最大特征值.
+
+=== 强凸函数
+若存在常数 $m > 0$, 使得对于任意 $x, y in "dom" f$ 以及 $theta in \[ 0 \, 1 \]$, 有
+$  f(theta x + (1 - theta) y) lt.eq theta f(x) + (1 - theta) f(y) - m / 2 theta (1 - theta) bar.v.double x - y bar.v.double^2 $
+则称 $f$ 为 *强凸函数 (Strongly Convex Function)*, 其中 $bar.v.double dot.op bar.v.double$ 是某种范数.
+
+也可以用另一个等价的定义: 若存在常数 $m > 0$, 使得 $f(x) - m / 2 bar.v.double x bar.v.double^2$ 是凸函数, 则称 $f$ 为强凸函数.
+
+如果 $f$ 是强凸函数, 且存在最小值, 则该最小值唯一.
+
+=== 凸函数判定定理
+*降维法则*: $f: RR^n -> RR$ 是凸函数, 当且仅当对每个 $x in "dom" f$, $v in RR^n$, 函数
+$
+  g(t) = f(x + t v), quad "dom" g = { t : x + t v in "dom" f }
+$
+是关于 $t$ 的凸函数.
+
+这个定理说明, 函数 $f$ 是凸函数, 当且仅当其在任意方向上的单变量函数都是凸函数.
+
+*一阶条件*: 对于定义在凸集 $cal(C) subset RR^n$ 上的可微函数 $f: cal(C) -> RR$, $f$ 是凸函数, 当且仅当对于任意 $x, y in cal(C)$, 有
+$
+  f(y) >= f(x) + nabla f(x)^T (y - x)
+$
+
+这里的 $nabla f(x)$ 是 $f$ 在点 $x$ 处的梯度. 该条件说明, 函数 $f$ 在任意点处的切平面都在函数图像的下方.
+
+*梯度单调性* : 对于定义在凸集 $cal(C) subset RR^n$ 上的可微函数 $f: cal(C) -> RR$, $f$ 是凸函数, 当且仅当对于任意 $x, y in cal(C)$, 有
+$
+  (nabla f(x) - nabla f(y))^T (x - y) gt.eq 0
+$
+
+即梯度是单调映射.
+
+*上方图法则*: $f: RR^n -> RR$ 是凸函数, 当且仅当其上方图
+$  "epi" f = { (x, t) in RR^(n + 1) : f(x) lt.eq t } $
+是凸集.
+
+*二阶条件*: 对于定义在开凸集 $cal(C) subset RR^n$ 上的二阶连续 Fréchet 可微函数 $f: cal(C) -> RR$, $f$ 是凸函数, 当且仅当对于任意 $x in cal(C)$, 其 Hessian 矩阵 $nabla^2 f(x)$ 是半正定的, 即
+$
+  nabla^2 f(x) succ.curly.eq 0
+$
+如果 $nabla^2 f(x)$ 是正定的, 即 $nabla^2 f(x) succ 0$, 则 $f$ 是严格凸函数. 从几何上看, 该条件说明函数 $f$ 的图像在任意点处都是 "向上弯曲" 的.
+
+=== Jenson 不等式
+设 $f: RR^n -> RR$ 是凸函数, 则对于任意 $x_1, x_2, dots.h.c, x_m in "dom" f$, 以及任意非负数 $theta_1, theta_2, dots.h.c, theta_m$ 满足 $sum_(i = 1)^m theta_i = 1$, 有
+$  
+  f(sum_(i = 1)^m theta_i x_i) lt.eq sum_(i = 1)^m theta_i f(x_i)
+$
+写成概率的形式, 即对于随机变量 $X$ 满足 $P(X = x_i) = theta_i$, 有
+$
+  f(bb(E)[X]) lt.eq bb(E)[f(X)]
+$
+
+== 保凸的运算
+=== 非负加权和与仿射函数的复合
