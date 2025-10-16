@@ -1000,3 +1000,165 @@ $
 
 == 保凸的运算
 === 非负加权和与仿射函数的复合
+*非负加权*
+设 $f_1, f_2, dots.h.c, f_m: RR^n -> RR$ 是凸函数, $theta_1, theta_2, dots.h.c, theta_m$ 是非负数, 则函数
+$
+  f(x) = sum_(i = 1)^m theta_i f_i (x)
+$
+是凸函数. 如果至少有一个 $f_i$ 是严格凸函数, 且对应的 $theta_i > 0$, 则 $f$ 是严格凸函数.
+
+*仿射函数的复合*
+设 $f: RR^m -> RR$ 是凸函数, $g: RR^n -> RR^m$ 是仿射函数, 即 $g(x) = A x + b$, 其中 $A in RR^(m times n)$, $b in RR^m$, 则函数
+$
+  h(x) = f(g(x)) = f(A x + b)
+$
+是凸函数. 
+
+=== 逐点取最大值
+设 $f_1, f_2, dots.h.c, f_m: RR^n -> RR$ 是凸函数, 则函数
+$
+  f(x) = max_(i = 1, dots.h.c, m) f_i (x)
+$
+是凸函数. 例如, $x in RR^n$ 的前 $k$ 大分量和函数
+$
+  f(x) = sum_(i = 1)^k x_( [i] ), quad x_( [1] ) >= x_( [2] ) >= dots.h.c >= x_( [n] )
+$
+是凸函数, 这是因为 $f(x)$ 可以写成 $f(x) = max_(S subset {1, dots.h.c, n}, |S| = k) sum_(i in S) x_i$ 的形式, 而 $sum_(i in S) x_i$ 是仿射函数.
+
+=== 逐点取上界
+若对于每个 $x in RR^n$, 函数族 ${ f(x, y) | y in cal(A) }$ 的上界存在, 且对于每个 $y in cal(A)$, $f(dot.c, y): RR^n -> RR$ 是凸函数, 则函数
+$
+  g(x) = sup_(y in cal(A)) f(x, y)
+$
+例如
+- 集合 $cal(C)$ 到指定点 $x_0$ 的最远距离 $f(x) = sup_(y in cal(C)) bar.v.double x - y bar.v.double_2$ 是凸函数.
+- 对称矩阵 $X in cal(S)^n$ 的最大特征值函数 $f(X) = lambda_max (X) = sup_(bar.v.double v bar.v.double_2 = 1) v^T X v$ 是凸函数.
+
+#showybox(
+  title: "矩阵最大特征值函数的推导",
+  frame: (
+    border-color: blue,
+    title-color: blue.lighten(30%),
+    body-color: blue.lighten(95%),
+    footer-color: blue.lighten(80%)
+  ),
+  // footer: "Information extracted from a well-known public encyclopedia"
+)[
+  设 $X in cal(S)^n$ 的特征值分解为 $X = Q Lambda Q^T$, 其中 $Lambda = "diag"(lambda_1, ..., lambda_n)$, $lambda_1 >= lambda_2 >= ... >= lambda_n$, 且根据谱定理, $Q$ 是正交矩阵. 令 $v = Q u$, 由于 $Q$ 是正交的 (i.e., $Q^T Q = I$), 则当 $bar.v.double v bar.v.double_2 = 1$ 时, 有 $bar.v.double u bar.v.double_2 = 1$. 因此
+  $
+    v^T X v = (Q u)^T (Q Lambda Q^T) (Q u) = u^T Lambda u = sum_(i = 1)^n lambda_i u_i^2
+  $
+  由于 $sum_(i = 1)^n u_i^2 = bar.v.double u bar.v.double_2^2 = 1$, 所以 $v^T X v$ 是 $lambda_i$ 的一个凸组合, 因此
+  $
+    v^T X v = sum_(i = 1)^n lambda_i u_i^2 lt.eq lambda_1 sum_(i = 1)^n u_i^2 = lambda_1 = lambda_max (X)
+  $
+  特别地, 当 $u = (1, 0, dots.h, 0)^T$, 即 $v$ 是 $X$ 的最大特征值对应的单位特征向量时, 上式取等号. 因此, $lambda_max (X) = sup_(bar.v.double v bar.v.double_2 = 1) v^T X v$.
+]
+
+=== 与标量函数的复合
+给定函数 $g: RR^n -> R$ 和 $h: RR -> RR$, 则函数 $f: RR^n -> RR$ 定义为
+$
+  f(x) = h(g(x))
+$
+- 如果 $g$ 是凸函数, 且 $h$ 是凸且非减函数, 则 $f$ 是凸函数.
+- 如果 $g$ 是凹函数, 且 $h$ 是凸且非增函数, 则 $f$ 是凸函数.
+
+*推论*
+- 如果 $g$ 是凸函数, 则 $f(x) = exp(g(x))$ 是凸函数.
+- 如果 $g$ 是正值凸函数, 则 $f(x) = 1 / g(x)$ 是凸函数.
+
+=== 与向量函数的复合
+给定函数 $g: RR^n -> RR^m$ 和 $h: RR^m -> RR$, 则函数 $f: RR^n -> RR$ 定义为
+$
+  f(x) = h(g(x))
+$
+- 如果 $g_i (x)$ 是凸函数, $i = 1, dots.h, m$, 且 $h$ 是凸且非减函数, 则 $f$ 是凸函数.
+- 如果 $g_i (x)$ 是凹函数, $i = 1, dots.h, m$, 且 $h$ 是凸且非增函数, 则 $f$ 是凸函数.
+
+=== 取下确界
+设 $cal(A)$ 是非空集合, 且对于每个 $y in cal(A)$, 函数 $f(x, y): RR^n -> RR$ 是凸函数, 则函数
+$
+  g(x) = inf_(y in cal(A)) f(x, y)
+$
+是凸函数.
+
+例如
+- $x in RR^n$ 到集合 $cal(C)$ 的距离函数 $f(x) = inf_(y in cal(C)) bar.v.double x - y bar.v.double_2$ 是凸函数.
+
+=== 透视函数
+定义 $f: RR^n -> RR$, 则其 *透视函数 (Perspective Function)* 定义为
+$
+  g(x, t) = t f(x / t), quad "dom" g = { (x, t) : t > 0, x / t in "dom" f }
+$
+如果 $f$ 是凸函数, 则 $g$ 是凸函数. 
+
+例如, $f(x) = bar.v.double x bar.v.double_2^2$ 是凸函数, 则其透视函数
+$
+  g(x, t) = t (bar.v.double x / t bar.v.double_2^2) = (bar.v.double x bar.v.double_2^2) / t, quad "dom" g = { (x, t) : t > 0 }
+$
+
+另外, 考虑到 $f(x) = -log x$ 是凸函数, 则其透视函数
+$
+  g(x, t) = t (-log (x / t)) = t log t - t log x, quad "dom" g = { (x, t) : x > 0, t > 0 }
+$
+也就是 *相对熵函数 (Relative Entropy Function)* 是凸函数.
+=== 共轭函数
+适当函数 $f: RR^n -> macron(RR)$ 的 *Fenchel 共轭函数 (Fenchel Conjugate Function)* 定义为
+$
+  f^*(y) = sup_(x in RR^n) (y^T x - f(x))
+$
+无论 $f$ 是否是凸函数, 其共轭函数 $f^*$ 总是凸函数. 这是因为 $y^T x - f(x)$ 对于每一个固定的 $x$ 都是关于 $y$ 的仿射函数, 而 $f^*(y)$ 是这些仿射函数的上确界.
+
+== 凸函数的推广
+=== 拟凸函数
+设 $f: RR^n -> RR$, 如果 $"dom" f$ 是凸集, 且下水平集 $S_alpha = { x in RR^n : f(x) lt.eq alpha }$ 对于 任意 $alpha in RR$ 都是凸集, 则称 $f$ 为 *拟凸函数 (Quasi-Convex Function)*. 
+
+若 $f$ 是拟凸函数, 则称 $-f$ 为 *拟凹函数 (Quasi-Concave Function)*. 如果 $f$ 既是拟凸函数, 又是拟凹函数, 则称 $f$ 为 *拟线性 (Quasi-Affine)* 的.
+
+=== 拟凸函数的例子
+*拟凸函数*
+- $f(x) = sqrt(abs(x))$ 是 $RR$ 上的拟凸函数, 但不是凸函数.
+- 距离比值函数 $f(x) = (bar.v.double x - a bar.v.double_2) / (bar.v.double x - b bar.v.double_2)$, $"dom" f = { x : bar.v.double x - a bar.v.double_2 <= bar.v.double x - b bar.v.double_2 }$ 是拟凸函数.
+
+*拟凹函数*
+- $f(x_1, x_2) = x_1 x_2$, $"dom" f = RR^2_+$ 是拟凹函数
+
+*拟线性函数*
+- $f(x) = ceil(x)$ 是 $RR$ 上的拟线性函数
+- $f(x) = log(x)$ 是 $RR_+$ 上的拟线性函数
+- 分式线性函数 $f(x) = (a^T x + b) / (c^T x + d)$, $"dom" f = { x : c^T x + d > 0 }$ 是拟线性函数
+
+=== 拟凸函数的性质
+*类 Jenson 不等式*: 设 $f: RR^n -> RR$ 是拟凸函数, 则对于任意 $x_1, x_2, dots.h.c, x_m in "dom" f$, 以及任意非负数 $theta_1, theta_2, dots.h.c, theta_m$ 满足 $sum_(i = 1)^m theta_i = 1$, 有
+$
+  f(sum_(i = 1)^m theta_i x_i) lt.eq max_(i = 1, dots.h.c, m) f(x_i)
+$
+
+*一阶条件*: 对于定义在凸集 $cal(C) subset RR^n$ 上的可微函数 $f: cal(C) -> RR$, $f$ 是拟凸函数, 当且仅当对于任意 $x, y in cal(C)$, 有
+$
+  f(y) <= f(x) quad arrow.double.r quad nabla f(x)^T (y - x) <= 0
+$
+
+=== 对数凸函数
+如果正值函数 $f: RR^n -> RR_+$ 满足 $log f(x)$ 是凸函数, 则称 $f$ 为 *对数凸函数 (Log-Convex Function)*. 反之, 如果 $log f(x)$ 是凹函数, 则称 $f$ 为 *对数凹函数 (Log-Concave Function)*.
+
+- 幂函数 $f(x) = x^a$, 其中 $x in RR_+$, 当 $a < 0$ 或 $a >= 1$ 时, $f$ 是对数凸函数; 当 $0 < a <= 1$ 时, $f$ 是对数凹函数.
+- Gaussian 分布的概率密度函数 $f(x) = (1 / sqrt(2 pi sigma^2)) exp(-(x - mu)^2 / (2 sigma^2))$, 其中 $x in RR$, $mu in RR$, $sigma > 0$ 是对数凹函数.
+=== 对数凸函数的性质
+定义在凸集上的二阶可微函数 $f: cal(C) -> RR_+$ 是对数凸函数, 当且仅当对于任意 $x in cal(C)$, 有
+$
+  f(x) nabla^2 f(x) - (nabla f(x))(nabla f(x))^T succ.curly.eq 0
+$
+
+对数凹函数的乘积是对数凹函数, 即如果 $f_1, f_2, dots.h.c, f_m: RR^n -> RR_+$ 是对数凹函数, 则函数
+$  
+  f(x) = product_(i = 1)^m f_i (x)
+$
+是对数凹函数.
+
+=== 广义不等式意义下的凸函数
+$f:RR^n -> RR^m$ 称为 $cal(K)$-凸函数, 如果 $cal(K) subset RR^m$ 是凸集, 且对于任意 $x, y in "dom" f$, 以及 $theta in \[ 0 \, 1 \]$, 有
+$
+  f(theta x + (1 - theta) y) prec.curly.eq_(cal(K)) theta f(x) + (1 - theta) f(y)
+$
+
