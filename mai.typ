@@ -1,20 +1,30 @@
 #import "@preview/showybox:2.0.4": showybox
 
-#set heading(numbering: "1.")
-#set text(14pt, font:("Libertinus Serif", "Source Han Serif SC"))
-#set page(numbering: "1")
+#import "@preview/ilm:1.4.1": *
+#import "@preview/finite:0.5.0": automaton
+#import "@preview/finite:0.5.0"
 
-#show heading.where(level: 1): set text(blue)
-#show heading.where(level: 2): set text(green)
-#show heading.where(level: 3): set text(purple)
+#set text(font:("Libertinus Serif", "Source Han Serif SC"))
+
+#show heading.where(level: 1): set text(navy.lighten(0%))
+#show heading.where(level: 2): set text(navy.lighten(20%))
+#show heading.where(level: 3): set text(navy.lighten(40%))
 #show ref: it => {
-  text(green, it)
+  text(purple, it)
 }
-#align(center)[
-  #text("Mathematics Foundation in AI", 20pt)
-]
 
-#outline(depth: 2)
+#show: ilm.with(
+  title: [Mathematics Foundation in Machine Learning],
+  date: datetime.today(),
+  author: "Tianlin Pan",
+  table-of-contents: outline(depth: 2),
+)
+
+#set heading(numbering: "1.1.1")
+#set page(numbering: "1")
+#set text(14pt)
+#show raw: set text(font: ("Maple Mono NF"), size: 12pt)
+
 = 第一章: 机器学习与优化建模
 == 矩阵奇异值分解
 === 定义
@@ -608,10 +618,10 @@ $z in bb(R)^n$, 有 $z^T X z gt.eq 0$.
 #showybox(
   title: "对称矩阵的半正定序",
   frame: (
-    border-color: blue,
-    title-color: blue.lighten(30%),
-    body-color: blue.lighten(95%),
-    footer-color: blue.lighten(80%)
+    border-color: navy,
+    title-color: navy.lighten(30%),
+    body-color: navy.lighten(95%),
+    footer-color: navy.lighten(80%)
   ),
   // footer: "Information extracted from a well-known public encyclopedia"
 )[
@@ -680,10 +690,10 @@ $
 #showybox(
   title: "闭集和内部",
   frame: (
-    border-color: blue,
-    title-color: blue.lighten(30%),
-    body-color: blue.lighten(95%),
-    footer-color: blue.lighten(80%)
+    border-color: navy,
+    title-color: navy.lighten(30%),
+    body-color: navy.lighten(95%),
+    footer-color: navy.lighten(80%)
   ),
 )[
   - 集合 $cal(C)$ 是 *闭集*, 如果对于任意收敛到 $x$ 的点列 ${ x_k }$,
@@ -735,10 +745,10 @@ $
 #showybox(
   title: "证明: 半正定锥是自对偶锥",
   frame: (
-    border-color: green,
-    title-color: green.lighten(30%),
-    body-color: green.lighten(95%),
-    footer-color: green.lighten(80%)
+    border-color: navy,
+    title-color: navy.lighten(30%),
+    body-color: navy.lighten(95%),
+    footer-color: navy.lighten(80%)
   ),
   footer: [注: 对于 $X in cal(S)_(+)^n$, 可分解为 $X = Q Lambda Q^T$, 其中 $Lambda = "diag"(lambda_1, ..., lambda_n)$. 由此我们可以定义 $X^(1/2) = Q Lambda^(1/2) Q^T in cal(S)_(+)^n$]
 )[
@@ -753,10 +763,10 @@ $
 #showybox(
   title: "对偶范数",
   frame: (
-    border-color: blue,
-    title-color: blue.lighten(30%),
-    body-color: blue.lighten(95%),
-    footer-color: blue.lighten(80%) 
+    border-color: navy,
+    title-color: navy.lighten(30%),
+    body-color: navy.lighten(95%),
+    footer-color: navy.lighten(80%) 
   ),
 )[
   设 $bar.v.double dot.op bar.v.double$ 是 $bb(R)^n$ 上的某种范数, 则其 *对偶范数* 定义为
@@ -1037,10 +1047,10 @@ $
 #showybox(
   title: "矩阵最大特征值函数的推导",
   frame: (
-    border-color: blue,
-    title-color: blue.lighten(30%),
-    body-color: blue.lighten(95%),
-    footer-color: blue.lighten(80%)
+    border-color: navy,
+    title-color: navy.lighten(30%),
+    body-color: navy.lighten(95%),
+    footer-color: navy.lighten(80%)
   ),
   // footer: "Information extracted from a well-known public encyclopedia"
 )[
@@ -1162,3 +1172,162 @@ $
   f(theta x + (1 - theta) y) prec.curly.eq_(cal(K)) theta f(x) + (1 - theta) f(y)
 $
 
+= 第三章: 典型优化问题
+== 凸优化
+=== 凸优化问题
+标准形式的凸优化问题定义为
+$
+  min &quad f_0(x) \
+  "s.t." &quad f_i (x) lt.eq 0, quad i = 1, dots.h, m \
+  &quad a_i^T x = b_i, quad i = 1, dots.h, p
+$
+其中 $f_0, f_1, dots, f_m$ 是凸函数. 
+
+*拟凸问题*
+标准形式的拟凸优化问题定义为
+$
+  min &quad f_0(x) \
+  "s.t." &quad f_i (x) lt.eq 0, quad i = 1, dots.h, m \
+  &quad a_i^T x = b_i, quad i = 1, dots.h, p
+$
+其中 $f_0$ 是拟凸函数, $f_1, dots, f_m$ 是凸函数.
+
+凸优化问题的一个重要性质为其可行集为凸集, 因为可行集是由凸不等式约束和仿射等式约束所定义的.
+=== 局部和全局极小
+*定理*: 如果 $x^*$ 是凸优化问题的局部极小点, 则 $x^*$ 也是全局极小点.
+#showybox(
+  title: "凸优化中的局部极小即全局极小",
+  frame: (
+    border-color: navy,
+    title-color: navy.lighten(30%),
+    body-color: navy.lighten(95%),
+    footer-color: navy.lighten(80%)
+  ),
+  // footer: "Information extracted from a well-known public encyclopedia"
+)[
+  设凸优化问题为
+  $
+    min &quad f_0(x) \
+    "s.t." &quad f_i (x) lt.eq 0, quad i = 1, dots.h, m \
+    &quad a_i^T x = b_i, quad i = 1, dots.h, p
+  $
+  假设 $x^*$ 是该问题的局部极小点, 则存在 $epsilon > 0$, 使得对于任意满足 $bar.v.double x - x^* bar.v.double lt.eq epsilon$ 的可行点 $x$, 有 $f_0(x) gt.eq f_0(x^*)$.
+
+  现在取任意可行点 $y$, 并定义
+  $
+    z = theta y + (1 - theta) x^*
+  $
+  其中 $theta in (0, 1)$ 是充分小的常数. 因为可行集是凸集, 所以 $z$ 是可行点. 同时, 当 $theta$ 足够小时, 有
+  $
+    bar.v.double z - x^* bar.v.double = theta bar.v.double y - x^* bar.v.double lt.eq epsilon
+  $
+  因此根据局部极小点的定义, 有 $f_0(z) gt.eq f_0(x^*)$. 又因为 $f_0$ 是凸函数, 所以
+  $
+    f_0(z) lt.eq theta f_0(y) + (1 - theta) f_0(x^*)
+  $
+  将上面两个不等式结合起来, 可得
+  $
+    theta f_0(y) + (1 - theta) f_0(x^*) gt.eq f_0(x^*) => f_0(y) - f_0(x^*) gt.eq 0
+  $
+  因为 $y$ 是任意可行点, 所以 $x^*$ 是全局极小点.
+]
+=== 可微凸优化问题的最优性条件
+$x$ 是凸优化问题 $min_(x in X) f_0(x)$ 的最优解当且仅当对于任意 $y in X$, 有
+$
+  nabla f_0(x)^T (y - x) gt.eq 0
+$
+直观来说, 该条件说明在可行集 $X$ 内, 函数 $f_0$ 在点 $x$ 处的任意可行方向上的方向导数都是非负的, 即没有一个可行方向能够使得 $f_0$ 下降. 
+== 线性规划
+=== 线性规划问题的定义
+线性规划问题的一般形式如下:
+$
+  min &quad c^T x \
+  "s.t." &quad A x lt.eq b \
+  &quad G x = e
+$
+其中 $c in RR^n$, $A in RR^(m times n)$, $b in RR^m$, $G in RR^(p times n)$, $e in RR^p$. 
+=== 基追踪问题
+基追踪问题是压缩感知中的一个基本问题, 其数学模型为
+$
+  min &quad bar.v.double x bar.v.double_1 \
+  "s.t." &quad A x = b
+$
+对于每一个 $|x_i|$ 引入一个非负变量 $z_i$, 并添加约束 $-z_i lt.eq x_i lt.eq z_i$, 则基追踪问题可以转化为以下线性规划问题:
+$
+  min &quad sum_(i = 1)^n z_i \
+  "s.t." &quad A x = b \
+  &quad -z_i lt.eq x_i lt.eq z_i, quad i = 1, dots.h, n
+$
+
+=== 数据拟合
+在数据拟合中, 除了常用的最小二乘模型外, 还有最小 $ell_1$ 范数模型, 其数学模型为
+$
+  min &quad bar.v.double A x - b bar.v.double_1
+$
+和最小 $ell_oo$ 范数模型, 其数学模型为
+$
+  min &quad bar.v.double A x - b bar.v.double_oo
+$
+这两个模型都可以转化为线性规划问题. 例如, 最小 $ell_1$ 范数模型可以转化为
+$
+  min &quad sum_(i = 1)^m z_i \
+  "s.t." &quad A x - b lt.eq z \
+  &quad - (A x - b) lt.eq z
+$
+其中 $z in RR^m$ 是引入的辅助变量. 对于最小 $ell_oo$ 范数模型, 可以引入一个辅助变量 $t in RR$, 并转化为
+$
+  min &quad t \
+  "s.t." &quad A x - b lt.eq t bold(1) \
+  &quad - (A x - b) lt.eq t bold(1)
+$
+
+=== 多面体的切比雪夫中心
+对于多面体 $cal(P) = { x in RR^n : A x lt.eq b }$, 其 *切比雪夫中心 (Chebyshev Center)* 定义为包含在 $cal(P)$ 内的最大欧氏球的中心. 设该球的中心为 $x_c in RR^n$, 半径为 $r in RR_+$, 则该球可以表示为
+$
+  cal(B) = { x in RR^n : bar.v.double x - x_c bar.v.double_2 lt.eq r }
+$
+
+为了使得 $cal(B) subset cal(P)$, 需要满足对于每个 $i = 1, dots.h, m$, 有
+$
+  a_i^T x_c + r bar.v.double a_i bar.v.double_2 lt.eq b_i
+$
+
+这样, 切比雪夫中心问题可以转化为以下线性规划问题:
+$
+  max &quad r \
+  "s.t." &quad a_i^T x_c + r bar.v.double a_i bar.v.double_2 lt.eq b_i, quad i = 1, dots.h, m \
+  &quad r gt.eq 0
+$
+== 二次锥规划
+=== 二次规划问题的定义
+标准形式的二次锥规划问题 (QP) 定义为
+$
+  min &quad 1/2 x^T P x + q^T x + r \
+  "s.t." &quad G x <= h \
+  &quad A x = b
+$
+=== 最小二乘问题
+最小二乘问题的数学模型为
+$
+  min &quad 1/2 bar.v.double A x - b bar.v.double_2^2
+$
+其中 $A in RR^(m times n)$, $b in RR^m$.  因为 $1/2 bar.v.double A x - b bar.v.double_2^2 = 1/2 (A x - b)^T (A x - b) = 1/2 x^T (A^T A) x - b^T A x + 1/2 b^T b$, 所以最小二乘问题是二次规划问题的一个特例.
+
+=== 二次*锥*规划问题的定义
+标准形式的二次锥规划问题 (SOCP) 定义为
+$
+  min &quad f^T x \
+  "s.t." &quad bar.v.double A_i x + b_i bar.v.double_2 lt.eq c_i^T x + d_i, quad i = 1, dots.h, m \
+  &quad F x = g
+$
+
+优化问题中的不等式 $bar.v.double A_i x + b_i bar.v.double_2 lt.eq c_i^T x + d_i$ 使得 $x$ 必须在一个特定的锥体内.
+== 半定规划
+=== 半定规划问题的定义
+标准形式的半定规划问题 (SDP) 定义为
+$
+  min &quad c^T x \
+  "s.t." &quad x_1 A_1 + x_2 A_2 + dots.h.c + x_n A_n + B prec.curly.eq 0 \
+  &quad G x = h
+$
+半定规划 (SDP) 是线性规划在矩阵空间中的一种推广, 的目标函数和等式约束均为关于矩阵的线性函数，而它与线性规划不同的地方是其自变量取值于半正定矩阵空间.

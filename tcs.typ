@@ -1,21 +1,28 @@
+#import "@preview/ilm:1.4.1": *
 #import "@preview/finite:0.5.0": automaton
 #import "@preview/finite:0.5.0"
 
-#set heading(numbering: "1.")
-#set text(14pt, font:("Libertinus Serif", "Source Han Serif SC"))
-#set page(numbering: "1")
+#set text(font:("Libertinus Serif", "Source Han Serif SC"))
 
-#show heading.where(level: 1): set text(blue)
-#show heading.where(level: 2): set text(green)
-#show heading.where(level: 3): set text(purple)
+#show heading.where(level: 1): set text(navy.lighten(0%))
+#show heading.where(level: 2): set text(navy.lighten(20%))
+#show heading.where(level: 3): set text(navy.lighten(40%))
 #show ref: it => {
-  text(green, it)
+  text(purple, it)
 }
-#align(center)[
-  #text("Theoretic Computer Science", 20pt)
-]
 
-#outline(depth: 2)
+#show: ilm.with(
+  title: [Theoretic Computer Science],
+  date: datetime.today(),
+  author: "Tianlin Pan",
+  table-of-contents: outline(depth: 2),
+)
+
+#set heading(numbering: "1.1.a")
+#set page(numbering: "1")
+#set text(14pt)
+#show raw: set text(font: ("Maple Mono NF"), size: 12pt)
+
 
 = 数学术语
 == 字符串和语言
@@ -476,3 +483,24 @@ $ L(M) = sum_(q_f in F) R_f $
 - 搜索包含 "error" 的行: `grep "error" filename.txt`
 - 使用正则表达式搜索以 "a" 开头, 后跟任意数量的字符, 然后是 "b" 的行: `grep "^a.*b$" filename.txt`
 - 忽略大小写搜索 "warning": `grep -i "warning" filename.txt`
+
+= 泵引理 (Pumping Lemma)
+== 引子
+DFA 的状态数量是有限的, 因此当输入字符串足够长时, DFA 必须在某些状态之间循环 (即鸽巢原理), 而重复路径对应的子串就可以任意重复或删除而不影响字符串是否被接受. 泵引理正是基于这一观察, 它为正则语言提供了一个 *必要条件*.
+== 引理内容
+设 $L$ 是一个正则语言, 则存在一个整数 $p >= 1$ (称为泵长度), 使得对于任意字符串 $s in L$ 且 $|s| >= p$, 都可以将 $s$ 分割为三个子串 $s = x y z$, 满足以下条件:
+1. $|y| >= 1$ (即子串 $y$ 非空)
+2. $|x y| <= p$ (即子串 $x y$ 的长度不超过泵长度 $p$)
+3. 对于所有整数 $i >= 0$, 字符串 $x y^i z in L$ (即通过重复子串 $y$ 任意次数, 生成的新字符串仍然属于语言 $L$)
+
+== 证明思路
+设 $L$ 是一个正则语言, 则存在一个识别 $L$ 的 DFA $M = \( Q \, Sigma \, delta \, q_0 \, F \)$, 其中 $|Q| = n$ (状态数量). 取泵长度 $p = n$. 对于任意字符串 $s in L$ 且 $|s| >= p$, 在处理字符串 $s$ 时, DFA 必须经过至少 $p + 1$ 个状态 (包括初始状态). 根据鸽巢原理, 在这 $p + 1$ 个状态中, 至少有两个状态是相同的. 设这两个相同的状态分别在处理字符串 $s$ 的第 $k$ 个和第 $m$ 个字符后到达, 其中 $0 <= k < m <= |s|$. 将字符串 $s$ 分割为三个子串:
+- $x = s[0:k]$ (从第 $0$ 个字符到第 $k - 1$ 个字符)
+- $y = s[k:m]$ (从第 $k$ 个字符到第 $m - 1$ 个字符)
+- $z = s[m: abs(s)]$ (从第 $m$ 个字符到最后一个字符)
+由于在处理子串 $y$ 时, DFA 从状态 $q$ 回到状态 $q$, 因此对于任意整数 $i >= 0$, 处理字符串 $x y^i z$ 时, DFA 仍然会到达接受状态 (因为它与处理字符串 $s$ 时经过的状态路径相同). 因此, $x y^i z in L$. 这证明了泵引理的内容.
+
+== 使用泵引理证明语言非正则
+要使用泵引理证明一个语言 $L$ 非正则, 我们可以采用反证法. 假设 $L$ 是正则的, 则根据泵引理, 存在一个泵长度 $p >= 1$. 然后, 我们需要找到一个字符串 $s in L$ 且 $|s| >= p$, 使得对于任意的分割 $s = x y z$ 满足泵引理的条件, 都存在一个整数 $i >= 0$ 使得 $x y^i z not in L$. 这就与泵引理的结论矛盾, 因此 $L$ 非正则.
+
+= 极小化 DFA
