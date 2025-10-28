@@ -9,6 +9,7 @@
 #show heading.where(level: 1): set text(navy.lighten(0%))
 #show heading.where(level: 2): set text(navy.lighten(20%))
 #show heading.where(level: 3): set text(navy.lighten(40%))
+
 #show ref: it => {
   text(purple, it)
 }
@@ -25,6 +26,20 @@
 #set text(14pt)
 #show raw: set text(font: ("Maple Mono NF"), size: 12pt)
 
+#let frameSettings = (
+  border-color: navy,
+  title-color: navy.lighten(30%),
+  body-color: navy.lighten(95%),
+  footer-color: navy.lighten(80%)
+)
+
+#let frameSettingsEastern = (
+  border-color: eastern,
+  title-color: eastern.lighten(30%),
+  body-color: eastern.lighten(95%),
+  footer-color: eastern.lighten(80%)
+)
+
 = 第一章: 机器学习与优化建模
 == 矩阵奇异值分解
 === 定义
@@ -35,6 +50,16 @@ $Sigma in bb(R)^(m times n)$ 为对角矩阵, 其对角线上的元素
 $sigma_1 \, sigma_2 \, dots.h \, sigma_r$ (其中 $r = min { m \, n }$) 为
 $A$ 的奇异值, 且满足
 $sigma_1 gt.eq sigma_2 gt.eq dots.h gt.eq sigma_r gt.eq 0$. 
+
+#showybox(
+  title: "SVD 的意义",
+  frame: frameSettingsEastern,
+)[
+  SVD 的本质是 *分解*. 它告诉我们任何复杂的线性变换 $A$ 都可以被拆分成三步:
+  1. 一次旋转 (由 $V^T$ 描述),
+  2. 一次沿着坐标轴的缩放 (由 $Sigma$ 描述, 缩放因子为奇异值),
+  3. 再一次旋转 (由 $U$ 描述).
+]
 
 === 分解方法 
 1. 计算 $A^T A$ 和 $A A^T$ 的特征值和特征向量. 
@@ -617,12 +642,7 @@ $z in bb(R)^n$, 有 $z^T X z gt.eq 0$.
 我们一般称 $cal(S)_(+)^n$ 为 #strong[半正定锥 (Positive Semidefinite Cone)];, 它是一个凸锥.
 #showybox(
   title: "对称矩阵的半正定序",
-  frame: (
-    border-color: navy,
-    title-color: navy.lighten(30%),
-    body-color: navy.lighten(95%),
-    footer-color: navy.lighten(80%)
-  ),
+  frame: frameSettings,
   // footer: "Information extracted from a well-known public encyclopedia"
 )[
   对称矩阵 $X \, Y in cal(S)^n$ 的 *半正定序 (Semidefinite Ordering)* 定义为
@@ -689,12 +709,7 @@ $
 
 #showybox(
   title: "闭集和内部",
-  frame: (
-    border-color: navy,
-    title-color: navy.lighten(30%),
-    body-color: navy.lighten(95%),
-    footer-color: navy.lighten(80%)
-  ),
+  frame: frameSettings,
 )[
   - 集合 $cal(C)$ 是 *闭集*, 如果对于任意收敛到 $x$ 的点列 ${ x_k }$,
     $ forall k, x_k in cal(C) => x in cal(C). $
@@ -744,12 +759,7 @@ $
 
 #showybox(
   title: "证明: 半正定锥是自对偶锥",
-  frame: (
-    border-color: navy,
-    title-color: navy.lighten(30%),
-    body-color: navy.lighten(95%),
-    footer-color: navy.lighten(80%)
-  ),
+  frame: frameSettings,
   footer: [注: 对于 $X in cal(S)_(+)^n$, 可分解为 $X = Q Lambda Q^T$, 其中 $Lambda = "diag"(lambda_1, ..., lambda_n)$. 由此我们可以定义 $X^(1/2) = Q Lambda^(1/2) Q^T in cal(S)_(+)^n$]
 )[
   第一步, 证明 $cal(S)_(+)^n subset.eq (cal(S)_(+)^n)^*$. 对任意 $X in cal(S)_(+)^n$ 和 $Y in cal(S)_(+)^n$, 有 $angle.l X, Y angle.r = tr \( X Y \) = tr \( Y^(1 \/ 2) X Y^(1 \/ 2) \) gt.eq 0$. (利用迹的循环不变性);
@@ -762,12 +772,7 @@ $
 
 #showybox(
   title: "对偶范数",
-  frame: (
-    border-color: navy,
-    title-color: navy.lighten(30%),
-    body-color: navy.lighten(95%),
-    footer-color: navy.lighten(80%) 
-  ),
+  frame: frameSettings,
 )[
   设 $bar.v.double dot.op bar.v.double$ 是 $bb(R)^n$ 上的某种范数, 则其 *对偶范数* 定义为
   $
@@ -855,6 +860,7 @@ $
 $
 
 === Hessian 矩阵
+<hessian-matrix>
 如果函数 $f(x): RR^n -> RR$ 在点 $x$ 处是 Fréchet 可微的, 且其梯度 $nabla f(x)$ 在点 $x$ 处也是 Fréchet 可微的, 则称 $f$ 在点 $x$ 处是 *二阶 Fréchet 可微*, 此时定义 $f$ 在点 $x$ 处的 *Hessian 矩阵* 为
 $
 nabla^2 f(x) =
@@ -900,6 +906,7 @@ $
 所以有 $nabla f(X) = X - A$.
 
 === 广义实值函数与适当函数
+<proper-function>
 令 $macron(RR) = RR union {plus.minus oo}$ 为广义实数空间, 则映射 $f: RR^n -> macron(RR)$ 称为 *广义实值函数*. 
 
 给定广义实值函数 $f$ 和非空集合 $cal(X)$, 如果存在 $x in cal(X)$ 使得 $f(x) < + oo$, 并且对任意的 $x in cal(X)$, 都有 $f(x) > - oo$, 则称 $f$ 在 $cal(X)$ 上是 *适当的 (Proper)*.
@@ -957,6 +964,7 @@ $
 - 谱范数函数 $f(X) = bar.v.double X bar.v.double_2 = sigma_max (X) = (lambda_max (X^T X))^(1/2)$, 其中 $sigma_max (X)$ 表示矩阵 $X$ 的最大奇异值, $lambda_max (X)$ 表示矩阵 $X$ 的最大特征值.
 
 === 强凸函数
+<strongly-convex-function>
 若存在常数 $m > 0$, 使得对于任意 $x, y in "dom" f$ 以及 $theta in \[ 0 \, 1 \]$, 有
 $  f(theta x + (1 - theta) y) lt.eq theta f(x) + (1 - theta) f(y) - m / 2 theta (1 - theta) bar.v.double x - y bar.v.double^2 $
 则称 $f$ 为 *强凸函数 (Strongly Convex Function)*, 其中 $bar.v.double dot.op bar.v.double$ 是某种范数.
@@ -1046,12 +1054,7 @@ $
 
 #showybox(
   title: "矩阵最大特征值函数的推导",
-  frame: (
-    border-color: navy,
-    title-color: navy.lighten(30%),
-    body-color: navy.lighten(95%),
-    footer-color: navy.lighten(80%)
-  ),
+  frame: frameSettings,
   // footer: "Information extracted from a well-known public encyclopedia"
 )[
   设 $X in cal(S)^n$ 的特征值分解为 $X = Q Lambda Q^T$, 其中 $Lambda = "diag"(lambda_1, ..., lambda_n)$, $lambda_1 >= lambda_2 >= ... >= lambda_n$, 且根据谱定理, $Q$ 是正交矩阵. 令 $v = Q u$, 由于 $Q$ 是正交的 (i.e., $Q^T Q = I$), 则当 $bar.v.double v bar.v.double_2 = 1$ 时, 有 $bar.v.double u bar.v.double_2 = 1$. 因此
@@ -1121,6 +1124,7 @@ $
 
 == 凸函数的推广
 === 拟凸函数
+<quasi-convex-function>
 设 $f: RR^n -> RR$, 如果 $"dom" f$ 是凸集, 且下水平集 $S_alpha = { x in RR^n : f(x) lt.eq alpha }$ 对于 任意 $alpha in RR$ 都是凸集, 则称 $f$ 为 *拟凸函数 (Quasi-Convex Function)*. 
 
 若 $f$ 是拟凸函数, 则称 $-f$ 为 *拟凹函数 (Quasi-Concave Function)*. 如果 $f$ 既是拟凸函数, 又是拟凹函数, 则称 $f$ 为 *拟线性 (Quasi-Affine)* 的.
@@ -1197,12 +1201,7 @@ $
 *定理*: 如果 $x^*$ 是凸优化问题的局部极小点, 则 $x^*$ 也是全局极小点.
 #showybox(
   title: "凸优化中的局部极小即全局极小",
-  frame: (
-    border-color: navy,
-    title-color: navy.lighten(30%),
-    body-color: navy.lighten(95%),
-    footer-color: navy.lighten(80%)
-  ),
+  frame: frameSettings,
   // footer: "Information extracted from a well-known public encyclopedia"
 )[
   设凸优化问题为
@@ -1331,3 +1330,92 @@ $
   &quad G x = h
 $
 半定规划 (SDP) 是线性规划在矩阵空间中的一种推广, 的目标函数和等式约束均为关于矩阵的线性函数，而它与线性规划不同的地方是其自变量取值于半正定矩阵空间.
+
+= 第四章: 最优性理论
+== 最优化问题解的存在性
+考虑优化问题
+$
+  min &quad f(x) \
+  "s.t." &quad x in cal(X)
+$
+首先要考虑的是最优解的存在性. 在数学分析课程中, 我们学习过 *Weierstrass 定理*: 如果函数 $f$ 在紧集 $cal(X)$ 上连续, 则 $f$ 在 $cal(X)$ 上必有最小值.
+
+#showybox(
+  title: "紧集",
+  frame: frameSettings,
+)[
+  在欧氏空间 $RR^n$ 中, 集合 $cal(X) subset RR^n$ 称为 *紧集 (Compact Set)*, 如果 $cal(X)$ 是闭集且有界的. 
+  - 闭集 (Closed Set): 集合 $cal(X)$ 包含其所有的极限点, 即 $ { x_k } subset.eq cal(X), lim_(k -> oo) x_k = x ==> x in cal(X) $.
+  - 有界集 (Bounded Set): 存在常数 $M > 0$, 使得对于任意 $x in cal(X)$, 有 $bar.v.double x bar.v.double lt.eq M$.
+
+  在拓扑空间中, $K$ 是紧集, 如果从 $K$ 的任意开覆盖中都能选出有限子覆盖.
+]
+
+#showybox(
+  title: "Weierstrass 定理",
+  frame: frameSettings,
+)[
+  设 $f: cal(X) -> RR$ 在紧集 $cal(X) subset RR^n$ 上连续, 则存在 $x^* in cal(X)$, 使得对于任意 $x in cal(X)$, 有
+  $
+    f(x^*) <= f(x)
+  $
+  即 $f$ 在 $cal(X)$ 上取得最小值.
+]
+
+现在我们提出 *推广的 Weierstrass 定理*:
+
+如果函数 $f: cal(X) -> (-oo, +oo]$ 适当 (@proper-function) 且闭, 且以下条件中任意一条成立
+1. $"dom" f = { x in cal(X) : f(x) < +oo }$ 是非空且有界的;
+2. 存在常数 $bar(gamma) in RR$, 使得集合 $C_(macron(gamma)) = { x in cal(X) : f(x) lt.eq macron(gamma) }$ 非空且有界;
+3. $f$ 是 *强制* 的, 即对于任意实数序列 ${ x_k }$ 满足 $bar.v.double x_k bar.v.double -> +oo$, 有 $f(x_k) -> +oo$;
+则函数 $f$ 的最小值点集 ${x in cal(X) : f(x) <= f(y), forall y in cal(X) }$ 非空且紧.
+
+这三个条件在本质上都是在确保 $f(x)$ 的最小值不会出现在无穷远处. 定理仅要求 $f$ 是闭函数, 而不要求 $f$ 在其定义域上连续, 因此比数学分析中的 Weierstrass 定理更为一般.
+
+== 解的存在唯一性
+=== 强拟凸函数
+之前我们已经定义了强凸函数 (@strongly-convex-function) 和拟凸函数 (@quasi-convex-function). 现在我们定义 *强拟凸函数 (Strongly Quasi-Convex Function)*:
+
+给定凸集 $cal(X)$ 和函数 $f: cal(x) -> (-oo, +oo]$, 若取任意 $x != y$ 和 $lambda in (0, 1)$, 有
+$
+  f(lambda x + (1 - lambda) y) < max { f(x), f(y) } 
+$
+则称 $f$ 为强拟凸函数. 强拟凸函数不一定是凸函数,  但其任意一个下水平集都是凸集 (因为下水平集中的任意两点的连线上的函数值都小于等于这两个点的函数值的最大值). 
+
+任意强凸函数均为强拟凸的, 但是凸函数并不一定是强拟凸的
+
+=== 唯一性定理
+设 $cal(X)$ 是 $RR^n$ 的一个非空, 紧且凸的子集, 如果 $f: cal(X) -> (-oo, +oo]$ 是适当, 闭, 且强拟凸, 则优化问题
+$
+  min &quad f(x) \
+  "s.t." &quad x in cal(X)
+$
+存在唯一的最优解.
+
+== 无约束可微问题的最优性理论
+无约束可微优化问题通常表示为如下形式:
+$
+  min &quad f(x)
+$
+其中 $f: RR^n -> RR$ 是可微函数. 给定一个点 $macron(x)$, 我们想要知道这个点是否是函数 $f$ 的一个局部极小解或者全局极小解. 如果从定义出发, 需要对其邻域内的所有点进行判断, 这不可行. 因此, 我们需要一些更简洁的条件来判定 $macron(x)$ 是否为极小解.
+
+=== 一阶必要条件: 下降方向
+对于可微函数 $f$ 和点 $x in RR^n$, 如果存在向量 $d in RR^n$, 使得
+$
+  nabla f(x)^T d < 0
+$
+则称 $d$ 为 $f$ 在点 $x$ 处的一个 *下降方向 (Descent Direction)*. 直观来说, 如果沿着方向 $d$ 移动, 则函数值会减小.
+
+*定理*: 如果 $macron(x)$ 是无约束优化问题的一个局部极小点, 则对于任意向量 $d in RR^n$, 有
+$
+  nabla f(macron(x)) = 0
+$
+
+=== 二阶最优性条件
+在没有额外假设时, 如果一阶必要条件满足, 我们仍然不能确定当前点是否是一个局部极小点. 
+
+*必要条件*: 如果 $macron(x)$ 是无约束优化问题的一个局部极小点, 则 $nabla f(macron(x)) = 0$, 且 $nabla^2 f(macron(x)) succ.curly.eq 0$. 其中 $nabla^2 f(macron(x))$ 是 $f$ 在点 $macron(x)$ 处的 Hessian 矩阵 (@hessian-matrix).
+
+*充分条件*: 如果 $nabla f(macron(x)) = 0$, 且 $nabla^2 f(macron(x)) succ 0$, 则 $macron(x)$ 是无约束优化问题的一个局部极小点.
+
+== 对偶理论
