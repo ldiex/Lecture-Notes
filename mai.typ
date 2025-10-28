@@ -68,40 +68,40 @@ $sigma_1 gt.eq sigma_2 gt.eq dots.h gt.eq sigma_r gt.eq 0$.
 
 == 范数
 === 向量范数
-若实值函数 $bar.v.double dot.op bar.v.double : bb(R)^n arrow.r bb(R)$
+若实值函数 $norm(dot.op) : bb(R)^n arrow.r bb(R)$
 满足下列条件: 
-1. 正定性: $bar.v.double bold(x) bar.v.double gt.eq 0$, $forall bold(x) in bb(R)^n$. $bar.v.double x bar.v.double = 0 arrow.l.r.double bold(x) = bold(0)$. 
-2. 齐次性: $bar.v.double alpha bold(x) bar.v.double = lr(|alpha|) bar.v.double bold(x) bar.v.double$, $forall a in bb(R)$, $bold(x) in bb(R)^n$. 
-3. 三角不等式: $bar.v.double bold(x) + bold(y) bar.v.double lt.eq bar.v.double bold(x) bar.v.double + bar.v.double bold(y) bar.v.double$, $forall bold(x) \, bold(y) in bb(R)^n$. 
+1. 正定性: $norm(bold(x)) gt.eq 0$, $forall bold(x) in bb(R)^n$. $norm(x) = 0 arrow.l.r.double bold(x) = bold(0)$. 
+2. 齐次性: $norm(alpha bold(x)) = lr(|alpha|) norm(bold(x))$, $forall a in bb(R)$, $bold(x) in bb(R)^n$. 
+3. 三角不等式: $norm(bold(x) + bold(y)) lt.eq norm(bold(x)) + norm(bold(y))$, $forall bold(x) \, bold(y) in bb(R)^n$. 
 
-则 $bar.v.double dot.op bar.v.double$ 为向量范数
+则 $norm(dot.op)$ 为向量范数
 
 定义 $L_p$ 范数为
-$ bar.v.double bold(x) bar.v.double_p = [sum_(j = 1)^n bar.v.double bold(x)_j bar.v.double^p]^(1 \/ p) \, quad 1 lt.eq p < oo $
-特别地, 我们有 $bar.v.double bold(x) bar.v.double_oo = max_j lr(|x_j|)$.
+$ norm(bold(x))_p = [sum_(j = 1)^n norm(bold(x)_j)^p]^(1 \/ p) \, quad 1 lt.eq p < oo $
+特别地, 我们有 $norm(bold(x))_oo = max_j lr(|x_j|)$.
 
 === 矩阵范数
 ==== 定义
 若实值函数
-$bar.v.double dot.op bar.v.double : bb(R)^(m times n) arrow.r bb(R)$
+$norm(dot.op) : bb(R)^(m times n) arrow.r bb(R)$
 满足下列条件: 
-1. 正定性: $bar.v.double A bar.v.double gt.eq 0$, $forall A in bb(R)^(m times n)$. $bar.v.double A bar.v.double = 0 arrow.l.r.double A = 0$. 
-2. 齐次性: $bar.v.double alpha A bar.v.double = lr(|alpha|) bar.v.double A bar.v.double$, $forall a in bb(R)$, $A in bb(R)^(m times n)$. 
-3. 三角不等式: $bar.v.double A + B bar.v.double lt.eq bar.v.double A bar.v.double + bar.v.double B bar.v.double$, $forall A \, B in bb(R)^(m times n)$.
+1. 正定性: $norm(A) gt.eq 0$, $forall A in bb(R)^(m times n)$. $norm(A) = 0 arrow.l.r.double A = 0$. 
+2. 齐次性: $norm(alpha A) = lr(|alpha|) norm(A)$, $forall a in bb(R)$, $A in bb(R)^(m times n)$. 
+3. 三角不等式: $norm(A + B) lt.eq norm(A) + norm(B)$, $forall A \, B in bb(R)^(m times n)$.
 
-则 $bar.v.double dot.op bar.v.double$ 为矩阵范数
+则 $norm(dot.op)$ 为矩阵范数
 
 ==== 一些常见的矩阵范数
 - Frobenius 范数:
-  $ bar.v.double A bar.v.double_F = [sum_(i = 1)^m sum_(j = 1)^n a_(i j)^2]^(1 \/ 2) $
+  $ norm(A)_F = [sum_(i = 1)^m sum_(j = 1)^n a_(i j)^2]^(1 \/ 2) $
 
 - 核范数 (Nuclear norm):
-  $ bar.v.double A bar.v.double_(*) = sum_(i = 1)^r sigma_i $ 其中
+  $ norm(A)_(*) = sum_(i = 1)^r sigma_i $ 其中
   $sigma_i$ 为 $A$ 的奇异值, $r = min { m \, n }$. 或者我们也可以定义
   $sigma_i$ 为 $A$ 的非零奇异值, $r = upright("rank") \( A \)$.
 
 - 谱范数 (Spectral norm):
-  $ bar.v.double A bar.v.double_2 = sigma_1 = max_(bold(x) eq.not 0) frac(bar.v.double A bold(x) bar.v.double_2, bar.v.double bold(x) bar.v.double_2) $
+  $ norm(A)_2 = sigma_1 = max_(bold(x) eq.not 0) frac(norm(A bold(x))_2, norm(bold(x))_2) $
   其中 $sigma_1$ 为 $A$ 的最大奇异值.
 
 ==== 矩阵内积
@@ -109,7 +109,7 @@ $bar.v.double dot.op bar.v.double : bb(R)^(m times n) arrow.r bb(R)$
 $ angle.l A \, B angle.r = upright("Tr") \( A^T B \) = sum_(i = 1)^m sum_(j = 1)^n a_(i j) b_(i j) $
 
 我们有 Cauchy-Schwarz 不等式:
-$ angle.l A \, B angle.r lt.eq bar.v.double A bar.v.double_F bar.v.double B bar.v.double_F $
+$ angle.l A \, B angle.r lt.eq norm(A)_F norm(B)_F $
 
 == 酉矩阵和酉不变性
 === 酉矩阵
@@ -121,9 +121,9 @@ $U$ 为 #strong[酉矩阵 (Unitary Matrix)];. 这里 $U^(*)$ 为 $U$
 即 $Q^T Q = Q Q^T = I$.
 
 === 酉不变性
-矩阵范数 $bar.v.double dot.op bar.v.double$ 如果满足
-$ bar.v.double U A V bar.v.double = bar.v.double A bar.v.double \, quad forall U in bb(C)^(m times m) \, V in bb(C)^(n times n) upright(" 为酉矩阵") . $
-则称 $bar.v.double dot.op bar.v.double$ 为 #strong[酉不变 (Unitary
+矩阵范数 $norm(dot.op)$ 如果满足
+$ norm(U A V) = norm(A) \, quad forall U in bb(C)^(m times m) \, V in bb(C)^(n times n) upright(" 为酉矩阵") . $
+则称 $norm(dot.op)$ 为 #strong[酉不变 (Unitary
 Invariant)] 的.
 
 向量的 $ell_2$ 范数和矩阵的 Frobenius 范数均为酉不变的.
@@ -238,7 +238,7 @@ $epsilon \( delta \, beta \, N \)$. 这就找到了估计误差的上界.
 $ hat(h)_(cal(H)) = arg min_(h in cal(H)) R_(upright("emp")) \( h \) $
 
 则有
-$ bar.v.double R_(upright("emp")) \( hat(h)_(cal(H)) \) - R^(*) bar.v.double &lt.eq underbrace(R_(upright("emp")) \( hat(h)_(cal(H)) \) - R_(upright("exp")) \( h_(cal(H))^(*) \), #[估计误差]) + underbrace(R_(upright("exp")) \( h_(cal(H))^(*) \) - R^(*), #[近似误差])  \ &< epsilon \( delta \, beta \, N \) + #[近似误差] $
+$ norm(R_(upright("emp")) \( hat(h)_(cal(H)) \) - R^(*)) &lt.eq underbrace(R_(upright("emp")) \( hat(h)_(cal(H)) \) - R_(upright("exp")) \( h_(cal(H))^(*) \), #[估计误差]) + underbrace(R_(upright("exp")) \( h_(cal(H))^(*) \) - R^(*), #[近似误差])  \ &< epsilon \( delta \, beta \, N \) + #[近似误差] $
 
 这就是泛化误差界,
 它刻画了学习算法的经验风险与期望风险之间偏差和收敛速度.
@@ -307,16 +307,16 @@ $ cal(X) = { bold(x) in bb(R)^n : c_i \( bold(x) \) lt.eq 0 \, i = 1 \, 2 \, dot
 === 全局最优解和局部最优解
 对于可行解 $macron(x) in cal(X)$, 定义如下概念: 
 1. 如果 $f \( macron(x) \) lt.eq f \( x \)$ 对于所有 $x in cal(X)$ 成立, 则称 $macron(x)$ 为 #strong[全局极小解 (Global Minimum)];. 
-2. 如果存在某个 $x in cal(X) inter B \( macron(x) \, epsilon.alt \)$ 成立, 其中 $B \( macron(x) \, epsilon.alt \) = { x in bb(R)^n : bar.v.double x - macron(x) bar.v.double < epsilon.alt }$, 则称 $macron(x)$ 为 #strong[局部极小解 (Local Minimum)];. 
+2. 如果存在某个 $x in cal(X) inter B \( macron(x) \, epsilon.alt \)$ 成立, 其中 $B \( macron(x) \, epsilon.alt \) = { x in bb(R)^n : norm(x - macron(x)) < epsilon.alt }$, 则称 $macron(x)$ 为 #strong[局部极小解 (Local Minimum)];. 
 3. 进一步地, 如果 $f \( macron(x) \) < f \( x \)$ 对于所有 $x in cal(X) inter B \( macron(x) \, epsilon.alt \)$ 且 $x eq.not macron(x)$ 成立, 则称 $macron(x)$ 为 #strong[严格局部极小解 (Strict Local Minimum)];. 
 4. 如果一个点是局部极小解, 但不是严格局部极小解, 则称其为 #strong[非严格局部极小解 (Non-strict Local Minimum)];.
 
 === 优化算法的收敛性
 对于实际的最优化问题, 我们常使用 #strong[迭代法 (Iterative Method)]
 来求解. 设 ${ x^k }$ 为算法产生的迭代序列, 如果在某种范数
-$bar.v.double dot.op bar.v.double$ 下, 对于某个局部 (或全局) 最优解
+$norm(dot.op)$ 下, 对于某个局部 (或全局) 最优解
 $x^(*)$, 有
-$lim_(k arrow.r oo) bar.v.double x^k - x^(*) bar.v.double = 0$,
+$lim_(k arrow.r oo) norm(x^k - x^(*)) = 0$,
 则称迭代序列 ${ x^k }$ #strong[依点列] 收敛于 $x^(*)$, 相应的算法称为是
 #strong[依点列收敛到局部 (或全局) 最优解];.
 
@@ -329,11 +329,11 @@ $lim_(k arrow.r oo) bar.v.double x^k - x^(*) bar.v.double = 0$,
 === 算法的渐进收敛速度
 设 ${ x^k }$ 为算法产生的迭代序列, $x^(*)$ 为某个局部 (或全局) 最优解:
 \1. 算法 (点列) $cal(Q)$-线性收敛 (Q-linear Convergence): 存在
-$ bar.v.double x^(k + 1) - x^(*) bar.v.double lt.eq mu bar.v.double x^k - x^(*) bar.v.double $
+$ norm(x^(k + 1) - x^(*)) lt.eq mu norm(x^k - x^(*)) $
 \2. 算法 (点列) $cal(Q)$-超线性收敛 (Q-superlinear Convergence):
-$ lim_(k arrow.r oo) frac(bar.v.double x^(k + 1) - x^(*) bar.v.double, bar.v.double x^k - x^(*) bar.v.double) = 0 $
+$ lim_(k arrow.r oo) frac(norm(x^(k + 1) - x^(*)), norm(x^k - x^(*))) = 0 $
 \3. 算法 (点列) $cal(Q)$-次线性收敛 (Q-sublinear Convergence):
-$ lim_(k arrow.r oo) frac(bar.v.double x^(k + 1) - x^(*) bar.v.double, bar.v.double x^k - x^(*) bar.v.double) = 1 $
+$ lim_(k arrow.r oo) frac(norm(x^(k + 1) - x^(*)), norm(x^k - x^(*))) = 1 $
 这里超线性收敛速度最快, 次线性收敛速度最慢, 分别是线性收敛的两个极端.
 
 #block[
@@ -342,7 +342,7 @@ $ lim_(k arrow.r oo) frac(bar.v.double x^(k + 1) - x^(*) bar.v.double, bar.v.dou
 
 + 算法 (点列) $cal(R)$-线性收敛 (R-linear Convergence): 存在一个
   $cal(Q)$-线性收敛到 0 的非负数列 ${ v_k }$, 使得对于所有
-  $k gt.eq k_0$, 有 $ bar.v.double x^k - x^(*) bar.v.double lt.eq v_k $
+  $k gt.eq k_0$, 有 $ norm(x^k - x^(*)) lt.eq v_k $
   类似地可以定义 $cal(R)$-超线性收敛和 $cal(R)$-次线性收敛. 从
   $cal(R)$-收敛速度的定义可以看出序列 ${ v_k }$ 的收敛速度被另一个序列
   ${ v_k }$ 所控制, 当知道 $v_k$ 的形式时, 我们也称算法 (点列)
@@ -355,7 +355,7 @@ $ lim_(k arrow.r oo) frac(bar.v.double x^(k + 1) - x^(*) bar.v.double, bar.v.dou
 算法停止迭代并输出当前的解作为最终结果.
 
 对于无约束优化问题, 常用的收敛准则有
-$ frac(f \( x^k \) - f \( x^(*) \), max { \| f \( x^(*) \) \| \, 1 }) < epsilon.alt_1 \, quad bar.v.double nabla f \( x^k \) bar.v.double < epsilon.alt_2 $
+$ frac(f \( x^k \) - f \( x^(*) \), max { \| f \( x^(*) \) \| \, 1 }) < epsilon.alt_1 \, quad norm(nabla f \( x^k \)) < epsilon.alt_2 $
 其中 $epsilon.alt_1 \, epsilon.alt_2$ 为预设的精度阈值, $x^(*)$
 为问题的最优解 (如果已知的话).
 这个准则结合了目标函数值的变化和梯度的大小,
@@ -376,21 +376,21 @@ $tilde(X) = \[ bold(x)_1 \, bold(x)_2 \, dots.h \, bold(x)_N \]^T in bb(R)^(N ti
 和 #strong[目标值向量]
 $bold(y) = \[ y_1 \, y_2 \, dots.h \, y_N \]^T in bb(R)^N$.
 则经验风险可以写成矩阵形式
-$ R_(upright("emp")) \( bold(theta) \) = 1 / N bar.v.double tilde(X) bold(theta) - bold(y) bar.v.double_2^2 $
+$ R_(upright("emp")) \( bold(theta) \) = 1 / N norm(tilde(X) bold(theta) - bold(y))_2^2 $
 最优化问题就为 $min_(bold(theta)) R_(upright("emp")) \( bold(theta) \)$.
 这个问题有解析解
 $ bold(theta)^(*) = \( tilde(X)^T tilde(X) \)^(- 1) tilde(X)^T bold(y) $
 ==== 岭回归 
 岭回归 (Ridge Regression) 是在最小二乘法的基础上, 引入
 $L_2$ 正则化项以防止过拟合. 岭回归的目标函数为
-$ R_(upright("ridge")) \( bold(theta) \) = bar.v.double tilde(X) bold(theta) - bold(y) bar.v.double_2^2 + lambda bar.v.double bold(theta) bar.v.double_2^2 $
+$ R_(upright("ridge")) \( bold(theta) \) = norm(tilde(X) bold(theta) - bold(y))_2^2 + lambda norm(bold(theta))_2^2 $
 $ bold(theta)^(*) = \( tilde(X)^T tilde(X) + lambda I \)^(- 1) tilde(X)^T bold(y) $
 
 #strong[岭回归的几何解释];: 岭回归的最优化问题
-$ min_(bold(theta)) bar.v.double tilde(X) bold(theta) - bold(y) bar.v.double_2^2 + lambda bar.v.double bold(theta) bar.v.double_2^2 $
+$ min_(bold(theta)) norm(tilde(X) bold(theta) - bold(y))_2^2 + lambda norm(bold(theta))_2^2 $
 等价于约束最优化问题
-$ min_(bold(theta)) quad & bar.v.double tilde(X) bold(theta) - bold(y) bar.v.double_2^2\
-upright("s.t.") quad & bar.v.double bold(theta) bar.v.double_2^2 lt.eq t $
+$ min_(bold(theta)) quad & norm(tilde(X) bold(theta) - bold(y))_2^2\
+upright("s.t.") quad & norm(bold(theta))_2^2 lt.eq t $
 这个约束条件定义了一个以原点为中心的球体, 岭回归的解 $bold(theta)^(*)$
 必须位于这个球体内.
 
@@ -416,12 +416,12 @@ Woodbury-Sherman-Morrison 公式可以显著降低计算复杂度.
 我们希望找到一个尽可能稀疏的 $x in bb(R)^n$, 使得 $A x = b$.
 
 注意到由于 $m lt.double n$, 该线性方程组有无穷多解, 重构出原始信号看似很难．但是, 这些解当中大部分是不重要的, 真正有用的解是所谓的 #strong[稀疏解];, 即原始信号中大部分元素为零, 只有少数元素非零. 因此, 我们可以将问题转化为
-$ \( ell_p \) : min bar.v.double x bar.v.double_p\
+$ \( ell_p \) : min norm(x)_p\
 upright("s.t.") quad A x = b \, quad p = 0 \, 1 \, 2 \, dots.h $ 当
-$p = 0$ 时, $bar.v.double x bar.v.double_0$ 表示 $x$ 中非零元素的个数, 该问题称为 #strong[$ell_0$ 优化问题];. 该问题是 NP-hard 的, $bar.v.double x bar.v.double_0$ 的取值只能为整数, 不能使用常规的最优化方法. 同时需要注意的是, $ell_1$ 和 $ell_2$ 的解也不一定相同.
+$p = 0$ 时, $norm(x)_0$ 表示 $x$ 中非零元素的个数, 该问题称为 #strong[$ell_0$ 优化问题];. 该问题是 NP-hard 的, $norm(x)_0$ 的取值只能为整数, 不能使用常规的最优化方法. 同时需要注意的是, $ell_1$ 和 $ell_2$ 的解也不一定相同.
 
 #strong[LASSO 问题];: 考虑带 $ell_1$ 正则化的最小二乘问题, 即
-$ min_x bar.v.double A x - b bar.v.double_2^2 + lambda bar.v.double x bar.v.double_1 $
+$ min_x norm(A x - b)_2^2 + lambda norm(x)_1 $
 该问题称为 LASSO (Least Absolute Shrinkage and Selection Operator) 问题,
 该问题可以被看作是 $ell_1$ 优化问题的一个变种. 通过调整正则化参数
 $lambda$, 可以控制解的稀疏性.
@@ -430,46 +430,46 @@ $lambda$, 可以控制解的稀疏性.
 考虑线性模型 $b = A x + epsilon.alt$, 假设
 $epsilon.alt tilde.op cal(N) \( 0 \, sigma^2 I \)$, 则我们可以得到给定
 $A$ 和 $x$ 时, 观测值 $b$ 的条件概率分布为
-$ p \( b divides A \, x \) = frac(1, \( 2 pi \)^(m \/ 2) sigma^m) exp (- frac(1, 2 sigma^2) bar.v.double A x - b bar.v.double_2^2) $
+$ p \( b divides A \, x \) = frac(1, \( 2 pi \)^(m \/ 2) sigma^m) exp (- frac(1, 2 sigma^2) norm(A x - b)_2^2) $
 我们希望估计一个最优的 $x$ 使得观测值 $b$ 出现的概率最大,
 即最大化对数似然函数
-$ max_x log p \( b divides A \, x \) = max_x - frac(1, 2 sigma^2) bar.v.double A x - b bar.v.double_2^2 + upright("const") $
+$ max_x log p \( b divides A \, x \) = max_x - frac(1, 2 sigma^2) norm(A x - b)_2^2 + upright("const") $
 
-可以看到这个最优化问题等价于最小化 $bar.v.double A x - b bar.v.double_2^2$,
+可以看到这个最优化问题等价于最小化 $norm(A x - b)_2^2$,
 这就是最小二乘法. 也就是说, #strong[当假设误差是高斯白噪声时,
 最小二乘解就是线性回归模型的最大似然解];.
 
 #strong[Tikhonov 正则化];: 为了平衡数据拟合和模型复杂度,
 我们可以引入正则化项, 得到 Tikhonov 正则化问题
-$ min_x bar.v.double A x - b bar.v.double_2^2 + lambda bar.v.double x bar.v.double_2^2 $
+$ min_x norm(A x - b)_2^2 + lambda norm(x)_2^2 $
 
 这就类似于最小二乘法中的岭回归. 由于正则项的存在,
 该问题的目标函数为强凸函数, 解的性质得到改善
 
 #strong[LASSO 问题及其变形] 另一方面, 如果希望解 $x$ 是稀疏的, 可以添加
 $ell_1$ 正则化项, 得到 LASSO 问题
-$ min_x bar.v.double A x - b bar.v.double_2^2 + lambda bar.v.double x bar.v.double_1 $
+$ min_x norm(A x - b)_2^2 + lambda norm(x)_1 $
 也可以考虑问题
-$ min_x bar.v.double A x - b bar.v.double_2^2 \, quad upright("s.t.") quad bar.v.double x bar.v.double_1 lt.eq t $
+$ min_x norm(A x - b)_2^2 \, quad upright("s.t.") quad norm(x)_1 lt.eq t $
 考虑到噪声 $epsilon.alt$ 的存在, 我们可以将约束条件改为
-$bar.v.double A x - b bar.v.double_2^2 lt.eq nu$, 这样就得到了一个等价的优化问题
-$ min_x bar.v.double x bar.v.double_1 \, quad upright("s.t.") quad bar.v.double A x - b bar.v.double_2^2 lt.eq nu $
+$norm(A x - b)_2^2 lt.eq nu$, 这样就得到了一个等价的优化问题
+$ min_x norm(x)_1 \, quad upright("s.t.") quad norm(A x - b)_2^2 lt.eq nu $
 如果参数 $x$ 具有 #strong[分组稀疏性] (Group Sparsity), 即 $x$
 的分量可分为 $G$ 个组, 每个组内的参数必须同时为零或同时非零,
 为此人们提出了 #strong[分组 LASSO 问题];:
-$ min_x bar.v.double A x - b bar.v.double_2^2 + mu sum_(g = 1)^G sqrt(n_g) bar.v.double x_(cal(I)_g) bar.v.double_2 $
+$ min_x norm(A x - b)_2^2 + mu sum_(g = 1)^G sqrt(n_g) norm(x_(cal(I)_g))_2 $
 其中 $cal(I)_g$ 是第 $g$ 个组的索引, 且
 $ n_g = lr(|cal(I)_g|) \, quad sum_(g = 1)^G n_g = n $
-这里的正则项也可以被看做是 $bar.v.double x_(cal(I)_g) bar.v.double_2$ 的
+这里的正则项也可以被看做是 $norm(x_(cal(I)_g))_2$ 的
 $ell_1$ 范数, 也就是对每个组的 $ell_2$ 范数求和. 分组 LASSO
 问题把稀疏性从单个特征提升到了组的级别上，但不要求组内的稀疏性.
 
 如果需要同时保证分组以及单个特征的稀疏性, 可以考虑将两种正则项结合起来,
 即有稀疏分组 LASSO 模型
-$ min_x bar.v.double A x - b bar.v.double_2^2 + mu sum_(g = 1)^G sqrt(n_g) bar.v.double x_(cal(I)_g) bar.v.double_2 + lambda bar.v.double x bar.v.double_1 $
+$ min_x norm(A x - b)_2^2 + mu sum_(g = 1)^G sqrt(n_g) norm(x_(cal(I)_g))_2 + lambda norm(x)_1 $
 
 当特征 $x$ 本身不稀疏但在某种变换下是稀疏的, 则需调整正则项
-$ min_x bar.v.double A x - b bar.v.double_2^2 + lambda bar.v.double F x bar.v.double_1 $
+$ min_x norm(A x - b)_2^2 + lambda norm(F x)_1 $
 特别地, 如果要求 $x$ 相邻元素之间是稀疏的 (i.e.~相邻元素之间的差分稀疏),
 则可以取
 $ F = mat(delim: "(", 1, - 1, 0, dots.h.c, 0; 0, 1, - 1, dots.h.c, 0; dots.v, dots.v, dots.down, dots.down, dots.v; 0, 0, dots.h.c, 1, - 1) in bb(R)^(\( n - 1 \) times n) $
@@ -484,7 +484,7 @@ $ p \( y divides bold(x) \) = frac(1, 1 + e^(- y bold(w)^T bold(x))) $
 由此可以写出对数似然函数
 $ ell \( bold(w) \) & = sum_(i = 1)^N log p \( y_i divides bold(x)_i \) = - sum_(i = 1)^N log \( 1 + e^(- y_i bold(w)^T bold(x)_i) \)\
  $ 在此基础上加上正则项
-$ R_(upright("emp")) \( bold(w) \) = sum_(i = 1)^N log \( 1 + e^(- y_i bold(w)^T bold(x)_i) \) + lambda bar.v.double bold(w) bar.v.double_2^2 $
+$ R_(upright("emp")) \( bold(w) \) = sum_(i = 1)^N log \( 1 + e^(- y_i bold(w)^T bold(x)_i) \) + lambda norm(bold(w))_2^2 $
 
 ==== 支持向量机 (SVM)
 TODO 
@@ -508,18 +508,18 @@ $Sigma = { \( i \, j \) : M_(i j) eq.not 0 }$, 我们希望找到一个低秩矩
 $X$ 使得
 $ min_(X in bb(R)^(m times n)) upright("rank") \( X \) quad upright("s.t.") quad X_(i j) = M_(i j) \, quad \( i \, j \) in Sigma $
 回顾矩阵的核范数定义为
-$ bar.v.double X bar.v.double_(*) = sum_(i = 1)^(min \( m \, n \)) sigma_i \( X \) $
+$ norm(X)_(*) = sum_(i = 1)^(min \( m \, n \)) sigma_i \( X \) $
 其中 $sigma_i \( X \)$ 是矩阵 $X$ 的奇异值. 由于核范数是一个凸函数,
 因此我们可以将上述问题转化为
-$ min_(X in bb(R)^(m times n)) bar.v.double X bar.v.double_(*) quad upright("s.t.") quad X_(i j) = M_(i j) \, quad \( i \, j \) in Sigma $
+$ min_(X in bb(R)^(m times n)) norm(X)_(*) quad upright("s.t.") quad X_(i j) = M_(i j) \, quad \( i \, j \) in Sigma $
 \
 考虑到观测可能出现误差, 我们可以给出该问题的二次罚函数形式
-$ min_(X in bb(R)^(m times n)) bar.v.double X bar.v.double_(*) + lambda sum_(\( i \, j \) in Sigma) \( X_(i j) - M_(i j) \)^2 $
+$ min_(X in bb(R)^(m times n)) norm(X)_(*) + lambda sum_(\( i \, j \) in Sigma) \( X_(i j) - M_(i j) \)^2 $
 又考虑到低秩矩阵可以被分解 $X = L R^T$, 其中 $L in bb(R)^(m times r)$,
 $R in bb(R)^(n times r)$, $r lt.double min \( m \, n \)$ 是矩阵的秩,
 因此我们可以将问题转化为
-$ min_(L in bb(R)^(m times r) \, R in bb(R)^(n times r)) sum_(\( i \, j \) in Sigma) \( L_i^T R_j - M_(i j) \)^2 + alpha bar.v.double L bar.v.double_F^2 + beta bar.v.double R bar.v.double_F^2 $
-这里 $bar.v.double L bar.v.double_F$ 和 $bar.v.double R bar.v.double_F$ 分别是矩阵 $L$
+$ min_(L in bb(R)^(m times r) \, R in bb(R)^(n times r)) sum_(\( i \, j \) in Sigma) \( L_i^T R_j - M_(i j) \)^2 + alpha norm(L)_F^2 + beta norm(R)_F^2 $
+这里 $norm(L)_F$ 和 $norm(R)_F$ 分别是矩阵 $L$
 和 $R$ 的 Frobenius 范数, 它的作用是消除 $L$ 和 $R$
 在放缩意义下的不唯一性, $alpha$ 和 $beta$ 是正则化参数.
 
@@ -549,7 +549,7 @@ $ theta x_1 + \( 1 - theta \) x_2 in cal(C) \, quad forall x_1 \, x_2 in cal(C) 
 + 凸集的内部 (Interior) 和闭包 (Closure) 也是凸集. 这里
   - 内部定义为
     其中
-    $B \( x \, r \) = { y in bb(R)^n : bar.v.double y - x bar.v.double < r }$.
+    $B \( x \, r \) = { y in bb(R)^n : norm(y - x) < r }$.
   - 闭包定义为
     $upright("cl") \( cal(C) \) = cal(C) union { x : x "is the limit point of" cal(C) }$.
 
@@ -608,8 +608,8 @@ $d in bb(R)^l$. $x lt.eq$ 和 $=$ 分别表示逐元素的比较.
 
 === 范数球和椭球
 #strong[范数球 (Norm Ball)] 是指形如
-$ cal(B) = { x in bb(R)^n : bar.v.double x - x_c bar.v.double lt.eq r } $
-$bar.v.double dot.op bar.v.double$ 为某种范数. 范数球是凸集.
+$ cal(B) = { x in bb(R)^n : norm(x - x_c) lt.eq r } $
+$norm(dot.op)$ 为某种范数. 范数球是凸集.
 
 #strong[椭球 (Ellipsoid)] 是指形如
 $ cal(E) = { x in bb(R)^n : \( x - x_c \)^T P^(- 1) \( x - x_c \) lt.eq 1 } $
@@ -617,14 +617,14 @@ $ cal(E) = { x in bb(R)^n : \( x - x_c \)^T P^(- 1) \( x - x_c \) lt.eq 1 } $
 为对称正定矩阵. 椭球是凸集.
 
 椭球也可以被表示为
-$ cal(E) = { x_c + A u : bar.v.double u bar.v.double_2 lt.eq 1 } $ 其中
+$ cal(E) = { x_c + A u : norm(u)_2 lt.eq 1 } $ 其中
 $A in bb(R)^(n times n)$ 满足 $P = A A^T$. 这里的 $A$
 可以被看做是将单位球映射到椭球的线性变换矩阵.
 
 === 范数锥
 #strong[范数锥 (Norm Cone)] 是指形如
-$ cal(K) = { \( x \, t \) in bb(R)^(n + 1) : bar.v.double x bar.v.double lt.eq t \, thin t gt.eq 0 } $
-的集合, 其中 $bar.v.double dot.op bar.v.double$ 为某种范数. 范数锥是凸锥.
+$ cal(K) = { \( x \, t \) in bb(R)^(n + 1) : norm(x) lt.eq t \, thin t gt.eq 0 } $
+的集合, 其中 $norm(dot.op)$ 为某种范数. 范数锥是凸锥.
 特别地, 用 $ell_2$ 范数定义的范数锥称为 #strong[二次锥]
 
 === 特殊矩阵集合和 (半) 正定锥
@@ -682,9 +682,9 @@ $
 $
 当 $P in cal(S)_(+)^n$ 时, 是凸锥. 这是因为双曲锥可以转化为二阶锥
 $
-  {x | bar.v.double A x bar.v.double_2 lt.eq c^T x , c^T x gt.eq 0, A^T A = P}
+  {x | norm(A x)_2 lt.eq c^T x , c^T x gt.eq 0, A^T A = P}
 $
-而二阶锥又可以通过二次锥 ${(x, t) | bar.v.double x bar.v.double_2 lt.eq t , t gt.eq 0}$ 通过仿射变换得到.
+而二阶锥又可以通过二次锥 ${(x, t) | norm(x)_2 lt.eq t , t gt.eq 0}$ 通过仿射变换得到.
 
 === 透视变换和分式线性变换的保凸性
 - *透视变换* $P : bb(R)^(n + 1) -> bb(R)^(n)$ 定义为:
@@ -715,7 +715,7 @@ $
     $ forall k, x_k in cal(C) => x in cal(C). $
   - 集合 $cal(C)$ 的 *内部* 定义为
     $ "int" cal(C) = { x in cal(C) : quad exists r gt 0 , B \( x \, r \) subset.eq cal(C) } $
-    这里 $B \( x \, r \) = { y in bb(R)^n : bar.v.double y - x bar.v.double < r }$.
+    这里 $B \( x \, r \) = { y in bb(R)^n : norm(y - x) < r }$.
 ]
 
 适当锥的例子有:
@@ -767,27 +767,27 @@ $
   第二步, 证明 $(cal(S)_(+)^n)^* subset.eq cal(S)_(+)^n$. 设 $Z in (cal(S)_(+)^n)^*$, 则对于任意 $Y in cal(S)_(+)^n$, 有 $angle.l Z, Y angle.r = tr \( Z Y \) gt.eq 0$. 假设 $Z in.not cal(S)_(+)^n$, 则存在 $u in bb(R)^n$ 使得 $u^T Z u lt 0$. 令 $Y = u u^T$, 则 $Y in cal(S)_(+)^n$, 但 $angle.l Z, Y angle.r = tr \( Z u u^T \) = u^T Z u lt 0$, 矛盾. 因此, $Z in cal(S)_(+)^n$.
 ]
 
-3. 锥 $K = {(x, t) | bar.v.double x bar.v.double_p lt.eq t , t gt.eq 0, p >= 1}$ 的对偶锥为 $ K^* = {(y, s) | bar.v.double y bar.v.double_q lt.eq s , s gt.eq 0, (p, q) "are dual"}. $ 因此二次锥 ($p = 2$) 是自对偶锥.
+3. 锥 $K = {(x, t) | norm(x)_p lt.eq t , t gt.eq 0, p >= 1}$ 的对偶锥为 $ K^* = {(y, s) | norm(y)_q lt.eq s , s gt.eq 0, (p, q) "are dual"}. $ 因此二次锥 ($p = 2$) 是自对偶锥.
 
 
 #showybox(
   title: "对偶范数",
   frame: frameSettings,
 )[
-  设 $bar.v.double dot.op bar.v.double$ 是 $bb(R)^n$ 上的某种范数, 则其 *对偶范数* 定义为
+  设 $norm(dot.op)$ 是 $bb(R)^n$ 上的某种范数, 则其 *对偶范数* 定义为
   $
-  bar.v.double y bar.v.double_(*) = sup_(bar.v.double x bar.v.double lt.eq 1) angle.l x, y angle.r = sup_(bar.v.double x bar.v.double lt.eq 1) x^T y
+  norm(y)_(*) = sup_(norm(x) lt.eq 1) angle.l x, y angle.r = sup_(norm(x) lt.eq 1) x^T y
   $
  这里的 $y$ 定义在原范数的对偶空间中, 对于 $bb(R)^n$ 来说, 对偶空间仍然是 $bb(R)^n$.
 
  *Hölder 不等式* 给出了范数与其对偶范数之间的关系:
   $ 
-  angle.l x, y angle.r lt.eq bar.v.double x bar.v.double bar.v.double y bar.v.double_(*)
+  angle.l x, y angle.r lt.eq norm(x) norm(y)_(*)
   $
 
  特别地, 对于 $ell_p$ 范数, 其对偶范数为 $ell_q$ 范数, 其中 $frac(1, p) + frac(1, q) = 1$. 这是 Hölder 不等式的一个推论
  $
-  angle.l x, y angle.r lt.eq bar.v.double x bar.v.double_p bar.v.double y bar.v.double_q, quad frac(1, p) + frac(1, q) = 1
+  angle.l x, y angle.r lt.eq norm(x)_p norm(y)_q, quad frac(1, p) + frac(1, q) = 1
  $
 ]
 
@@ -846,9 +846,9 @@ $
 === 梯度
 给定函数 $f: RR^n -> RR$, 且 $f$ 在 $x$ 的一个邻域内有意义, 若存在向量 $g in RR^n$ 满足
 $
-  lim_(p -> 0) (f(x + p) - f(x) - g^T p)/(bar.v.double p bar.v.double) = 0
+  lim_(p -> 0) (f(x + p) - f(x) - g^T p)/(norm(p)) = 0
 $
-其中 $bar.v.double dot.op bar.v.double$ 是某种范数, 则称 $f$ 在点 $x$ 处是 *Fréchet 可微*, 向量 $g$ 称为 $f$ 在点 $x$ 处的 *梯度*, 记为 $nabla f(x)$.
+其中 $norm(dot.op)$ 是某种范数, 则称 $f$ 在点 $x$ 处是 *Fréchet 可微*, 向量 $g$ 称为 $f$ 在点 $x$ 处的 *梯度*, 记为 $nabla f(x)$.
 
 特别地, 若我们把 $p$ 写成 $p = t bold(u)_i$, 其中 $t in RR$ 是标量, $bold(u)_i in RR^n$ 是单位向量, 则有
 $
@@ -874,9 +874,9 @@ $
 === 矩阵变量函数的导数
 多元函数梯度的定义可以推广到变量是矩阵的情形, 对于 函数 $f: RR^(m times n) -> RR$, 若存在矩阵 $G in RR^(m times n)$ 满足
 $
-  lim_(bar.v.double V bar.v.double -> 0) (f(X + P) - f(X) - angle.l G, V angle.r )/(bar.v.double V bar.v.double) = 0,
+  lim_(norm(V) -> 0) (f(X + P) - f(X) - angle.l G, V angle.r )/(norm(V)) = 0,
 $
-其中 $bar.v.double dot.op bar.v.double$ 是某种矩阵范数, $angle.l A, B angle.r = tr(A^T B)$, 则称 $f$ 在点 $X$ 处是 *Fréchet 可微*, 矩阵 $G$ 称为 $f$ 在点 $X$ 处的 *梯度*, 记为 $nabla f(X)$. 令 $x_(i j)$ 为矩阵 $X$ 的第 $i$ 行第 $j$ 列元素, 则
+其中 $norm(dot.op)$ 是某种矩阵范数, $angle.l A, B angle.r = tr(A^T B)$, 则称 $f$ 在点 $X$ 处是 *Fréchet 可微*, 矩阵 $G$ 称为 $f$ 在点 $X$ 处的 *梯度*, 记为 $nabla f(X)$. 令 $x_(i j)$ 为矩阵 $X$ 的第 $i$ 行第 $j$ 列元素, 则
 $
   (nabla f(X))_(i j) = (partial f(X))/(partial x_(i j)).
 $
@@ -896,7 +896,7 @@ $
 $
 因此 $nabla f(X) = B A^T$.
 
-2. 对于二次函数 $f(X) = 1/2 bar.v.double X - A bar.v.double_F^2 = 1/2 tr((X - A)(X - A)^T)$, 其中 $A in RR^(m times n)$. 取任意方向 $V$ 以及充分小的 $t in RR$, 有
+2. 对于二次函数 $f(X) = 1/2 norm(X - A)_F^2 = 1/2 tr((X - A)(X - A)^T)$, 其中 $A in RR^(m times n)$. 取任意方向 $V$ 以及充分小的 $t in RR$, 有
 $
   f(X + t V) - f(X) &= 1/2 tr((X + t V - A)(X + t V - A)^T) - 1/2 tr((X - A)(X - A)^T) \
   &= 1/2 tr(t^2 V V^T + t (X - A) V^T + t V (X - A)^T) \
@@ -932,7 +932,7 @@ $
   liminf_(y -> x) f(y) >= f(x)
 $
 则称 $f$ 在 $RR^n$ 上是 *下半连续 (Lower Semicontinuous)* 的. 这里 $liminf$ 表示下极限, 即
-$  liminf_(y -> x) f(y) = lim_(epsilon -> 0^+) (inf_(bar.v.double y - x bar.v.double lt.eq epsilon) f(y)) $
+$  liminf_(y -> x) f(y) = lim_(epsilon -> 0^+) (inf_(norm(y - x) lt.eq epsilon) f(y)) $
 
 设广义实值函数 $f: RR^n -> macron(RR)$, 则下列命题等价:
 1. $f(x)$ 的任意 $alpha$-下水平集 $cal(C)_alpha$ 都是闭集
@@ -957,19 +957,19 @@ $
 === 多元凸函数的例子
 欧式空间 $RR^n$ 中的例子:
 - 仿射函数 $f(x) = a^T x + b$, 其中 $a in RR^n$, $b in RR$.
-- $p$-范数函数 $f(x) = bar.v.double x bar.v.double_p$, 其中 $p >= 1$. 特别地, $p -> oo$ 时, $f(x) = max_i |x_i|$.
+- $p$-范数函数 $f(x) = norm(x)_p$, 其中 $p >= 1$. 特别地, $p -> oo$ 时, $f(x) = max_i |x_i|$.
 
 矩阵空间 $RR^(m times n)$ 中的例子:
 - 仿射函数 $f(X) = tr(A X^T) + b = sum_(i = 1)^m sum_(j = 1)^n a_(i j) x_(i j) + b$, 其中 $A in RR^(m times n)$, $b in RR$.
-- 谱范数函数 $f(X) = bar.v.double X bar.v.double_2 = sigma_max (X) = (lambda_max (X^T X))^(1/2)$, 其中 $sigma_max (X)$ 表示矩阵 $X$ 的最大奇异值, $lambda_max (X)$ 表示矩阵 $X$ 的最大特征值.
+- 谱范数函数 $f(X) = norm(X)_2 = sigma_max (X) = (lambda_max (X^T X))^(1/2)$, 其中 $sigma_max (X)$ 表示矩阵 $X$ 的最大奇异值, $lambda_max (X)$ 表示矩阵 $X$ 的最大特征值.
 
 === 强凸函数
 <strongly-convex-function>
 若存在常数 $m > 0$, 使得对于任意 $x, y in "dom" f$ 以及 $theta in \[ 0 \, 1 \]$, 有
-$  f(theta x + (1 - theta) y) lt.eq theta f(x) + (1 - theta) f(y) - m / 2 theta (1 - theta) bar.v.double x - y bar.v.double^2 $
-则称 $f$ 为 *强凸函数 (Strongly Convex Function)*, 其中 $bar.v.double dot.op bar.v.double$ 是某种范数.
+$  f(theta x + (1 - theta) y) lt.eq theta f(x) + (1 - theta) f(y) - m / 2 theta (1 - theta) norm(x - y)^2 $
+则称 $f$ 为 *强凸函数 (Strongly Convex Function)*, 其中 $norm(dot.op)$ 是某种范数.
 
-也可以用另一个等价的定义: 若存在常数 $m > 0$, 使得 $f(x) - m / 2 bar.v.double x bar.v.double^2$ 是凸函数, 则称 $f$ 为强凸函数.
+也可以用另一个等价的定义: 若存在常数 $m > 0$, 使得 $f(x) - m / 2 norm(x)^2$ 是凸函数, 则称 $f$ 为强凸函数.
 
 如果 $f$ 是强凸函数, 且存在最小值, 则该最小值唯一.
 
@@ -1049,23 +1049,23 @@ $
   g(x) = sup_(y in cal(A)) f(x, y)
 $
 例如
-- 集合 $cal(C)$ 到指定点 $x_0$ 的最远距离 $f(x) = sup_(y in cal(C)) bar.v.double x - y bar.v.double_2$ 是凸函数.
-- 对称矩阵 $X in cal(S)^n$ 的最大特征值函数 $f(X) = lambda_max (X) = sup_(bar.v.double v bar.v.double_2 = 1) v^T X v$ 是凸函数.
+- 集合 $cal(C)$ 到指定点 $x_0$ 的最远距离 $f(x) = sup_(y in cal(C)) norm(x - y)_2$ 是凸函数.
+- 对称矩阵 $X in cal(S)^n$ 的最大特征值函数 $f(X) = lambda_max (X) = sup_(norm(v)_2 = 1) v^T X v$ 是凸函数.
 
 #showybox(
   title: "矩阵最大特征值函数的推导",
   frame: frameSettings,
   // footer: "Information extracted from a well-known public encyclopedia"
 )[
-  设 $X in cal(S)^n$ 的特征值分解为 $X = Q Lambda Q^T$, 其中 $Lambda = "diag"(lambda_1, ..., lambda_n)$, $lambda_1 >= lambda_2 >= ... >= lambda_n$, 且根据谱定理, $Q$ 是正交矩阵. 令 $v = Q u$, 由于 $Q$ 是正交的 (i.e., $Q^T Q = I$), 则当 $bar.v.double v bar.v.double_2 = 1$ 时, 有 $bar.v.double u bar.v.double_2 = 1$. 因此
+  设 $X in cal(S)^n$ 的特征值分解为 $X = Q Lambda Q^T$, 其中 $Lambda = "diag"(lambda_1, ..., lambda_n)$, $lambda_1 >= lambda_2 >= ... >= lambda_n$, 且根据谱定理, $Q$ 是正交矩阵. 令 $v = Q u$, 由于 $Q$ 是正交的 (i.e., $Q^T Q = I$), 则当 $norm(v)_2 = 1$ 时, 有 $norm(u)_2 = 1$. 因此
   $
     v^T X v = (Q u)^T (Q Lambda Q^T) (Q u) = u^T Lambda u = sum_(i = 1)^n lambda_i u_i^2
   $
-  由于 $sum_(i = 1)^n u_i^2 = bar.v.double u bar.v.double_2^2 = 1$, 所以 $v^T X v$ 是 $lambda_i$ 的一个凸组合, 因此
+  由于 $sum_(i = 1)^n u_i^2 = norm(u)_2^2 = 1$, 所以 $v^T X v$ 是 $lambda_i$ 的一个凸组合, 因此
   $
     v^T X v = sum_(i = 1)^n lambda_i u_i^2 lt.eq lambda_1 sum_(i = 1)^n u_i^2 = lambda_1 = lambda_max (X)
   $
-  特别地, 当 $u = (1, 0, dots.h, 0)^T$, 即 $v$ 是 $X$ 的最大特征值对应的单位特征向量时, 上式取等号. 因此, $lambda_max (X) = sup_(bar.v.double v bar.v.double_2 = 1) v^T X v$.
+  特别地, 当 $u = (1, 0, dots.h, 0)^T$, 即 $v$ 是 $X$ 的最大特征值对应的单位特征向量时, 上式取等号. 因此, $lambda_max (X) = sup_(norm(v)_2 = 1) v^T X v$.
 ]
 
 === 与标量函数的复合
@@ -1096,7 +1096,7 @@ $
 是凸函数.
 
 例如
-- $x in RR^n$ 到集合 $cal(C)$ 的距离函数 $f(x) = inf_(y in cal(C)) bar.v.double x - y bar.v.double_2$ 是凸函数.
+- $x in RR^n$ 到集合 $cal(C)$ 的距离函数 $f(x) = inf_(y in cal(C)) norm(x - y)_2$ 是凸函数.
 
 === 透视函数
 定义 $f: RR^n -> RR$, 则其 *透视函数 (Perspective Function)* 定义为
@@ -1105,9 +1105,9 @@ $
 $
 如果 $f$ 是凸函数, 则 $g$ 是凸函数. 
 
-例如, $f(x) = bar.v.double x bar.v.double_2^2$ 是凸函数, 则其透视函数
+例如, $f(x) = norm(x)_2^2$ 是凸函数, 则其透视函数
 $
-  g(x, t) = t (bar.v.double x / t bar.v.double_2^2) = (bar.v.double x bar.v.double_2^2) / t, quad "dom" g = { (x, t) : t > 0 }
+  g(x, t) = t (norm(x / t)_2^2) = (norm(x)_2^2) / t, quad "dom" g = { (x, t) : t > 0 }
 $
 
 另外, 考虑到 $f(x) = -log x$ 是凸函数, 则其透视函数
@@ -1132,7 +1132,7 @@ $
 === 拟凸函数的例子
 *拟凸函数*
 - $f(x) = sqrt(abs(x))$ 是 $RR$ 上的拟凸函数, 但不是凸函数.
-- 距离比值函数 $f(x) = (bar.v.double x - a bar.v.double_2) / (bar.v.double x - b bar.v.double_2)$, $"dom" f = { x : bar.v.double x - a bar.v.double_2 <= bar.v.double x - b bar.v.double_2 }$ 是拟凸函数.
+- 距离比值函数 $f(x) = (norm(x - a)_2) / (norm(x - b)_2)$, $"dom" f = { x : norm(x - a)_2 <= norm(x - b)_2 }$ 是拟凸函数.
 
 *拟凹函数*
 - $f(x_1, x_2) = x_1 x_2$, $"dom" f = RR^2_+$ 是拟凹函数
@@ -1210,7 +1210,7 @@ $
     "s.t." &quad f_i (x) lt.eq 0, quad i = 1, dots.h, m \
     &quad a_i^T x = b_i, quad i = 1, dots.h, p
   $
-  假设 $x^*$ 是该问题的局部极小点, 则存在 $epsilon > 0$, 使得对于任意满足 $bar.v.double x - x^* bar.v.double lt.eq epsilon$ 的可行点 $x$, 有 $f_0(x) gt.eq f_0(x^*)$.
+  假设 $x^*$ 是该问题的局部极小点, 则存在 $epsilon > 0$, 使得对于任意满足 $norm(x - x^*) lt.eq epsilon$ 的可行点 $x$, 有 $f_0(x) gt.eq f_0(x^*)$.
 
   现在取任意可行点 $y$, 并定义
   $
@@ -1218,7 +1218,7 @@ $
   $
   其中 $theta in (0, 1)$ 是充分小的常数. 因为可行集是凸集, 所以 $z$ 是可行点. 同时, 当 $theta$ 足够小时, 有
   $
-    bar.v.double z - x^* bar.v.double = theta bar.v.double y - x^* bar.v.double lt.eq epsilon
+    norm(z - x^*) = theta norm(y - x^*) lt.eq epsilon
   $
   因此根据局部极小点的定义, 有 $f_0(z) gt.eq f_0(x^*)$. 又因为 $f_0$ 是凸函数, 所以
   $
@@ -1248,7 +1248,7 @@ $
 === 基追踪问题
 基追踪问题是压缩感知中的一个基本问题, 其数学模型为
 $
-  min &quad bar.v.double x bar.v.double_1 \
+  min &quad norm(x)_1 \
   "s.t." &quad A x = b
 $
 对于每一个 $|x_i|$ 引入一个非负变量 $z_i$, 并添加约束 $-z_i lt.eq x_i lt.eq z_i$, 则基追踪问题可以转化为以下线性规划问题:
@@ -1261,11 +1261,11 @@ $
 === 数据拟合
 在数据拟合中, 除了常用的最小二乘模型外, 还有最小 $ell_1$ 范数模型, 其数学模型为
 $
-  min &quad bar.v.double A x - b bar.v.double_1
+  min &quad norm(A x - b)_1
 $
 和最小 $ell_oo$ 范数模型, 其数学模型为
 $
-  min &quad bar.v.double A x - b bar.v.double_oo
+  min &quad norm(A x - b)_oo
 $
 这两个模型都可以转化为线性规划问题. 例如, 最小 $ell_1$ 范数模型可以转化为
 $
@@ -1283,18 +1283,18 @@ $
 === 多面体的切比雪夫中心
 对于多面体 $cal(P) = { x in RR^n : A x lt.eq b }$, 其 *切比雪夫中心 (Chebyshev Center)* 定义为包含在 $cal(P)$ 内的最大欧氏球的中心. 设该球的中心为 $x_c in RR^n$, 半径为 $r in RR_+$, 则该球可以表示为
 $
-  cal(B) = { x in RR^n : bar.v.double x - x_c bar.v.double_2 lt.eq r }
+  cal(B) = { x in RR^n : norm(x - x_c)_2 lt.eq r }
 $
 
 为了使得 $cal(B) subset cal(P)$, 需要满足对于每个 $i = 1, dots.h, m$, 有
 $
-  a_i^T x_c + r bar.v.double a_i bar.v.double_2 lt.eq b_i
+  a_i^T x_c + r norm(a_i)_2 lt.eq b_i
 $
 
 这样, 切比雪夫中心问题可以转化为以下线性规划问题:
 $
   max &quad r \
-  "s.t." &quad a_i^T x_c + r bar.v.double a_i bar.v.double_2 lt.eq b_i, quad i = 1, dots.h, m \
+  "s.t." &quad a_i^T x_c + r norm(a_i)_2 lt.eq b_i, quad i = 1, dots.h, m \
   &quad r gt.eq 0
 $
 == 二次锥规划
@@ -1308,19 +1308,19 @@ $
 === 最小二乘问题
 最小二乘问题的数学模型为
 $
-  min &quad 1/2 bar.v.double A x - b bar.v.double_2^2
+  min &quad 1/2 norm(A x - b)_2^2
 $
-其中 $A in RR^(m times n)$, $b in RR^m$.  因为 $1/2 bar.v.double A x - b bar.v.double_2^2 = 1/2 (A x - b)^T (A x - b) = 1/2 x^T (A^T A) x - b^T A x + 1/2 b^T b$, 所以最小二乘问题是二次规划问题的一个特例.
+其中 $A in RR^(m times n)$, $b in RR^m$.  因为 $1/2 norm(A x - b)_2^2 = 1/2 (A x - b)^T (A x - b) = 1/2 x^T (A^T A) x - b^T A x + 1/2 b^T b$, 所以最小二乘问题是二次规划问题的一个特例.
 
 === 二次*锥*规划问题的定义
 标准形式的二次锥规划问题 (SOCP) 定义为
 $
   min &quad f^T x \
-  "s.t." &quad bar.v.double A_i x + b_i bar.v.double_2 lt.eq c_i^T x + d_i, quad i = 1, dots.h, m \
+  "s.t." &quad norm(A_i x + b_i)_2 lt.eq c_i^T x + d_i, quad i = 1, dots.h, m \
   &quad F x = g
 $
 
-优化问题中的不等式 $bar.v.double A_i x + b_i bar.v.double_2 lt.eq c_i^T x + d_i$ 使得 $x$ 必须在一个特定的锥体内.
+优化问题中的不等式 $norm(A_i x + b_i)_2 lt.eq c_i^T x + d_i$ 使得 $x$ 必须在一个特定的锥体内.
 == 半定规划
 === 半定规划问题的定义
 标准形式的半定规划问题 (SDP) 定义为
@@ -1346,7 +1346,7 @@ $
 )[
   在欧氏空间 $RR^n$ 中, 集合 $cal(X) subset RR^n$ 称为 *紧集 (Compact Set)*, 如果 $cal(X)$ 是闭集且有界的. 
   - 闭集 (Closed Set): 集合 $cal(X)$ 包含其所有的极限点, 即 $ { x_k } subset.eq cal(X), lim_(k -> oo) x_k = x ==> x in cal(X) $.
-  - 有界集 (Bounded Set): 存在常数 $M > 0$, 使得对于任意 $x in cal(X)$, 有 $bar.v.double x bar.v.double lt.eq M$.
+  - 有界集 (Bounded Set): 存在常数 $M > 0$, 使得对于任意 $x in cal(X)$, 有 $norm(x) lt.eq M$.
 
   在拓扑空间中, $K$ 是紧集, 如果从 $K$ 的任意开覆盖中都能选出有限子覆盖.
 ]
@@ -1367,7 +1367,7 @@ $
 如果函数 $f: cal(X) -> (-oo, +oo]$ 适当 (@proper-function) 且闭, 且以下条件中任意一条成立
 1. $"dom" f = { x in cal(X) : f(x) < +oo }$ 是非空且有界的;
 2. 存在常数 $bar(gamma) in RR$, 使得集合 $C_(macron(gamma)) = { x in cal(X) : f(x) lt.eq macron(gamma) }$ 非空且有界;
-3. $f$ 是 *强制* 的, 即对于任意实数序列 ${ x_k }$ 满足 $bar.v.double x_k bar.v.double -> +oo$, 有 $f(x_k) -> +oo$;
+3. $f$ 是 *强制* 的, 即对于任意实数序列 ${ x_k }$ 满足 $norm(x_k) -> +oo$, 有 $f(x_k) -> +oo$;
 则函数 $f$ 的最小值点集 ${x in cal(X) : f(x) <= f(y), forall y in cal(X) }$ 非空且紧.
 
 这三个条件在本质上都是在确保 $f(x)$ 的最小值不会出现在无穷远处. 定理仅要求 $f$ 是闭函数, 而不要求 $f$ 在其定义域上连续, 因此比数学分析中的 Weierstrass 定理更为一般.

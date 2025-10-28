@@ -1,20 +1,44 @@
 #import "@preview/showybox:2.0.4": showybox
 
-#set heading(numbering: "1.")
-#set text(14pt, font:("Libertinus Serif", "Source Han Serif SC"))
-#set page(numbering: "1")
+#import "@preview/ilm:1.4.1": *
+#import "@preview/finite:0.5.0": automaton
+#import "@preview/finite:0.5.0"
 
-#show heading.where(level: 1): set text(blue)
-#show heading.where(level: 2): set text(green)
-#show heading.where(level: 3): set text(purple)
+#set text(font:("Libertinus Serif", "Source Han Serif SC"))
+
+#show heading.where(level: 1): set text(navy.lighten(0%))
+#show heading.where(level: 2): set text(navy.lighten(20%))
+#show heading.where(level: 3): set text(navy.lighten(40%))
+
 #show ref: it => {
-  text(green, it)
+  text(purple, it)
 }
-#align(center)[
-  #text("Computer Vision", 20pt)
-]
 
-#outline(depth: 2)
+#show: ilm.with(
+  title: [Computer Vision],
+  date: datetime.today(),
+  author: "Tianlin Pan",
+  table-of-contents: outline(depth: 2),
+)
+
+#set heading(numbering: "1.1.1")
+#set page(numbering: "1")
+#set text(14pt)
+#show raw: set text(font: ("Maple Mono NF"), size: 12pt)
+
+#let frameSettings = (
+  border-color: navy,
+  title-color: navy.lighten(30%),
+  body-color: navy.lighten(95%),
+  footer-color: navy.lighten(80%)
+)
+
+#let frameSettingsEastern = (
+  border-color: eastern,
+  title-color: eastern.lighten(30%),
+  body-color: eastern.lighten(95%),
+  footer-color: eastern.lighten(80%)
+)
 
 = 数字图像基础
 == 数字图像的表示
@@ -420,12 +444,7 @@ $
 
 #showybox(
   title: "图像复原和图像增强的区别",
-  frame: (
-    border-color: blue,
-    title-color: blue.lighten(30%),
-    body-color: blue.lighten(95%),
-    footer-color: blue.lighten(80%)
-  ),
+  frame: frameSettings,
   // footer: "Information extracted from a well-known public encyclopedia"
 )[
   *图像增强* 不考虑图像降质的原因, 只将图像中感兴趣的特征有选择地突出, 从而衰减不需要的特征. 改善后的图像不一定要去逼近原图像; *图像复原* 则是试图去逆转已知的图像降质过程, 以恢复原始图像. 图像复原通常需要对降质过程有一个明确的数学模型, 要建立评价复原好坏的客观标准.
@@ -560,13 +579,15 @@ $
 
 GAN 的训练过程可以表示为一个最小化最大化的问题:
 $
-min_G max_D V(D, G) = E_(x ~ p_"data" (x)) [log D(x)] + E_(z ~ p_z(z)) [log(1 - D(G(z)))]
+min_G max_D V(D, G) = E_(x ~ p_"data" (x)) [log D(x)] \
++ E_(z ~ p_z(z)) [log(1 - D(G(z)))]
 $
 其中, $G$ 是生成器, $D$ 是判别器, $p_"data"(x)$ 是真实数据的分布, $p_z(z)$ 是噪声的分布. 对于判别器 $D$ 而言, 它的目标是最大化正确分类真实图像和生成图像的概率; 对于生成器 $G$ 而言, 它的目标是最小化判别器对生成图像的分类错误率.
 
 *CGAN (Conditional GAN)*: 在生成器和判别器中引入条件变量 (如类别标签), 使得生成的图像能够符合特定的条件.
 $
-min_G max_D V(D, G) = E_(x ~ p_"data" (x)) [log D(x|y)] + E_(z ~ p_z(z)) [log(1 - D(G(z|y)))]
+min_G max_D V(D, G) = E_(x ~ p_"data" (x)) [log D(x|y)] \
++ E_(z ~ p_z(z)) [log(1 - D(G(z|y)))]
 $
 
 === 开集识别任务
