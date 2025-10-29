@@ -1,5 +1,6 @@
 #import "@preview/showybox:2.0.4": showybox
 
+#import "@preview/equate:0.3.2": equate
 #import "@preview/ilm:1.4.1": *
 #import "@preview/finite:0.5.0": automaton
 #import "@preview/finite:0.5.0"
@@ -20,6 +21,9 @@
   author: "Tianlin Pan",
   table-of-contents: outline(depth: 2),
 )
+
+#show: equate.with(breakable: true, sub-numbering: true)
+#set math.equation(numbering: "(1.1)")
 
 #set heading(numbering: "1.1.1")
 #set page(numbering: "1")
