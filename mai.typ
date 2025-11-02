@@ -1423,3 +1423,107 @@ $
 *充分条件*: 如果 $nabla f(macron(x)) = 0$, 且 $nabla^2 f(macron(x)) succ 0$, 则 $macron(x)$ 是无约束优化问题的一个局部极小点.
 
 == 对偶理论
+=== 一般的约束优化问题
+$
+  min_(x in RR) &quad f_0(x) \
+  "s.t." &quad c_i (x) <=0, quad i in cal(I) \
+  &quad c_i (x) = 0, quad i in cal(E)
+$
+这里 $cal(I)$ 和 $cal(E)$ 分别是表示不等式约束和等式约束的索引集. 这个问题的可行域定义为
+$
+  cal(X) = { x in RR^n : c_i (x) <= 0, quad i in cal(I); quad c_i (x) = 0, quad i in cal(E) }
+$
+通过将 $cal(X)$ 的示性函数
+$
+  I_(cal(X)) (x) = cases(
+    0\, &quad x in cal(X),
+    +oo\, &quad "otherwise" 
+  )
+$
+加到目标函数中可以得到无约束优化问题. 但是转化后问题的目标函数是不连续, 不可微的以及不是有限的, 这导致我们难以分析其理论性质以及设计有效的算法.
+
+=== Lagrange 函数
+对于约束优化问题, 我们定义其 *Lagrange 函数 (Lagrangian Function)* 为
+$
+  L(x, lambda, nu) = f_0(x) + sum_(i in cal(I)) lambda_i c_i (x) + sum_(i in cal(E)) nu_i c_i (x)
+$
+其中 $lambda_i$ 和 $nu_i$ 分别是与不等式约束和等式约束对应的拉格朗日乘子 (Lagrange Multipliers).
+
+=== Lagrange 对偶函数
+我们定义 *Lagrange 对偶函数 (Lagrangian Dual Function)* 为
+$
+  g(lambda, nu) &= inf_(x in RR^n) L(x, lambda, nu) \
+  &= inf_(x in RR^n) [ f_0(x) + sum_(i in cal(I)) lambda_i c_i (x) + sum_(i in cal(E)) nu_i c_i (x) ]
+$
+
+*弱对偶定理*: 对于任意 $lambda >= 0$ 和任意 $nu in RR^{|cal(E)|}$, 有
+$  
+  g(lambda, nu) <= p^*
+$
+其中 $p^*$ 是原始问题的最优值.
+
+=== Lagrange 对偶问题
+$
+  max_(lambda, nu) &quad g(lambda, nu) \
+  "s.t." &quad lambda >= 0
+$
+称为 *Lagrange 对偶问题 (Lagrangian Dual Problem)*. 其最优值记为 $q^*$. 根据弱对偶定理, 有 $q^* <= p^*$. 我们称 $p^* - q^*$ 为 *对偶间隙 (Duality Gap)*. Lagrange 对偶问题是一个凸优化问题.
+
+#showybox(
+  title: "理解 Lagrange 对偶理论",
+  frame: frameSettings
+)[
+  原始问题 $p^*$ 是在寻找一个最低成本的状态 $x$, 这个状态 $x$ 必须满足一系列的严格的规则 (约束). 示性函数 $I_(cal(X)) (x)$ 可以看作是对这些规则的惩罚, 即如果 $x$ 不满足规则, 则惩罚为无穷大. 但是这种惩罚方式过于严厉, 导致我们无法有效地分析和求解问题.
+
+  Lagrange 对偶理论通过引入拉格朗日乘子 $lambda$ 和 $nu$, 将这些严格的规则转化为一种软约束. 具体来说, 我们允许 $x$ 违反某些规则, 但是会根据违反的程度给予一定的惩罚, 这个惩罚的力度由拉格朗日乘子决定. 通过调整这些乘子, 我们可以在成本和规则之间找到一个平衡点.
+
+  $g(lambda, nu)$ 中的 "$inf$" 操作实际上是在寻找在给定惩罚力度下的最低成本状态. 通过最大化 $g(lambda, nu)$, 我们实际上是在寻找一组最优的惩罚力度, 使得即使在考虑惩罚的情况下, 我们仍然能够找到一个尽可能低成本的状态 (实际上就是一个 *Min-Max 问题*, 我们在最小化成本, 而规则的建立者在最大化惩罚)
+
+  因此, 弱对偶定理 $g(lambda, nu) <= p^*$ 的直觉就是:
+  - $p^*$ 是在严格遵守规则下的最低成本
+  - $g(lambda, nu)$ 是在某套惩罚规则下的最低成本
+  显然, 即使在考虑惩罚的情况下, 我们也不可能比严格遵守规则时的最低成本更低. 这就是为什么 $g(lambda, nu)$ 总是小于等于 $p^*$.
+
+  对偶间隙 $p^* - q^*$ 衡量了惩罚机制的不完美程度, 在某些 "好" 的情况下 (比如说凸优化), 对偶间隙为零, 即我们可以通过适当的惩罚机制完全恢复原始问题的最优解; 但是大部分情况下, 对偶间隙大于零, 这意味着通过惩罚机制得到的解可能无法完全达到原始问题的最优水平.
+]
+
+=== 实例: 线性方程组具有最小模的解
+$
+  min &quad x^T x \
+  "s.t." &quad A x = b
+$
+其 Lagrange 函数为
+$
+  L(x, nu) = x^T x + nu^T (A x - b)
+$
+先求 $L$ 关于 $x$ 的极小值:
+$
+  nabla_x L(x, nu) = 2x + A^T nu = 0 ==> x = -1/2 A^T nu
+$
+所以有
+$
+  g(nu) &= L(-1/2 A^T nu, nu) \
+  &= (-1/2 A^T nu)^T (-1/2 A^T nu) + nu^T (A (-1/2 A^T nu) - b) \
+  &= -1/4 nu^T A A^T nu - nu^T b
+$
+因此, 对偶问题为
+$
+  max_(nu) &quad -1/4 nu^T A A^T nu - nu^T b
+$
+
+#showybox(
+  title: "Fenchel 共轭和对偶问题",
+  frame: frameSettings
+)[
+  Lagrange 对偶函数 $g(lambda, nu)$ 可以通过 Fenchel 共轭函数来表示. 设
+  $
+    f(x) = f_0(x) + sum_(i in cal(I)) lambda_i c_i (x) + sum_(i in cal(E)) nu_i c_i (x),
+  $
+  则
+  $
+    g(lambda, nu) = inf_(x in RR^n) f(x) = -f^*(0).
+  $
+  这里 $f^*(y)$ 是函数 $f(x)$ 的 Fenchel 共轭函数.
+
+  我们成功地将一个在 $x$ 空间中带约束的最小化问题 (原问题 $p^*$), 转化为一个在 $(lambda, nu)$ 空间中不带约束的最大化问题 (对偶问题 $q^*$). 这个转化的桥梁就是 Fenchel 共轭函数, 它将原问题的复杂性封装在了对偶函数 $g(lambda, nu)$ 中.
+]
