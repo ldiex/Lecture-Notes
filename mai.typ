@@ -562,6 +562,16 @@ $ theta x_1 + \( 1 - theta \) x_2 in cal(C) \, quad forall x_1 \, x_2 in cal(C) 
 $ theta x_1 + \( 1 - theta \) x_2 in cal(C) \, quad forall x_1 \, x_2 in cal(C) \, thin forall theta in \[ 0 \, 1 \] $
 则称集合 $cal(C)$ 是 #strong[凸集 (Convex Set)];. 仿射集肯定是凸集.
 
+#showybox(
+  title: "仿射集是平移后的线性子空间",
+  frame: frameSettings,
+)[
+  $C$ 是仿射集, 则存在某个点 $x_0 in bb(R)^n$ 和某个线性子空间 $cal(V)$, 使得
+  $
+    C = x_0 + cal(V) = { x_0 + v | v in cal(V) } 
+  $
+]
+
 === 凸集的性质
 + 如果 $cal(S)$ 是凸集, 则
   $k cal(S) = { k x divides x in cal(S) \, thin k in bb(R) }$ 也是凸集.
@@ -570,7 +580,7 @@ $ theta x_1 + \( 1 - theta \) x_2 in cal(C) \, quad forall x_1 \, x_2 in cal(C) 
   也是凸集.
 + 如果 $cal(S)$ 和 $cal(T)$ 都是凸集, 则 $cal(S) sect cal(T)$ 也是凸集.
 + 凸集的内部 (Interior) 和闭包 (Closure) 也是凸集. 这里
-  - 内部定义为
+  - 内部定义为 $"int" \( cal(C) \) = { x in cal(C) : exists r gt.double 0 \,  "s.t."  B \( x \, r \) subset.eq cal(C) }$,
     其中
     $B \( x \, r \) = { y in bb(R)^n : norm(y - x) < r }$.
   - 闭包定义为
