@@ -12,7 +12,7 @@
 #show heading.where(level: 3): set text(navy.lighten(40%))
 
 #show ref: it => {
-  text(purple, it)
+  text(purple.darken(30%), it)
 }
 
 #show: ilm.with(
@@ -679,7 +679,7 @@ $z in bb(R)^n$, 有 $z^T X z gt.eq 0$.
   // footer: "Information extracted from a well-known public encyclopedia"
 )[
   对称矩阵 $X \, Y in cal(S)^n$ 的 *半正定序 (Semidefinite Ordering)* 定义为
-  $ X succ.curly.eq Y quad <=> quad X - Y "is positive semidefinite" $
+  $ X succ.curly.eq Y quad <==> quad X - Y "is positive semidefinite" $
   可以证明这是一个偏序 (Partial Order), 即对于任意 $X \, Y \, Z in cal(S)^n$, 有
   - $X succ.curly.eq X$ (自反性)
   - 如果 $X succ.curly.eq Y$ 且 $Y succ.curly.eq X$, 则 $X = Y$ (反对称性)
@@ -734,6 +734,7 @@ $
 
 == 广义不等式与对偶锥
 === 适当锥
+<proper-cone>
 我们知道锥是凸集, 一个凸锥 $K subset RR^n$ 是适当锥, 当其还满足
 1. $K$ 是闭集
 2. $K$ 是实心的, 即 $"int" K eq.not emptyset$
@@ -745,7 +746,7 @@ $
   frame: frameSettings,
 )[
   - 集合 $cal(C)$ 是 *闭集*, 如果对于任意收敛到 $x$ 的点列 ${ x_k }$,
-    $ forall k, x_k in cal(C) => x in cal(C). $
+    $ forall k, x_k in cal(C) ==> x in cal(C). $
   - 集合 $cal(C)$ 的 *内部* 定义为
     $ "int" cal(C) = { x in cal(C) : quad exists r gt 0 , B \( x \, r \) subset.eq cal(C) } $
     这里 $B \( x \, r \) = { y in bb(R)^n : norm(y - x) < r }$.
@@ -760,16 +761,17 @@ $
 $
 
 === 广义不等式
+<generalized-inequality>
 广义不等式是一种偏序 (不必要保证所有对象都具有可比较性), 可以使用适当锥诱导. 对于适当锥 $K subset RR^n$, 定义广义不等式
 $ 
-x lt.eq_K y quad <=> quad y - x in K 
+x lt.eq_K y quad <==> quad y - x in K 
 $
 严格广义不等式定义为
 $
-x lt._K y quad <=> quad y - x in "int" K
+x lt._K y quad <==> quad y - x in "int" K
 $
 
-*例子* 坐标分量不等式: $ x lt.eq_(RR_+^n) y quad <=> quad x_i lt.eq y_i \, i = 1 \, 2 \, dots.h \, n $
+*例子* 坐标分量不等式: $ x lt.eq_(RR_+^n) y quad <==> quad x_i lt.eq y_i \, i = 1 \, 2 \, dots.h \, n $
 
 *性质*
 1. 自反性: $x lt.eq_K x$
@@ -779,6 +781,7 @@ $
 5. 保持非负数乘法: 如果 $x lt.eq_K y$ 且 $alpha gt.eq 0$, 则 $alpha x lt.eq_K alpha y$
 
 === 对偶锥
+<dual-cone>
 令锥 $K subset Omega$, 则 $K$ 的对偶锥定义为
 $
 K^* = { y in Omega : angle.l x, y angle.r gt.eq 0 , quad forall x in K }
@@ -836,7 +839,7 @@ $
 === 对偶锥诱导的广义不等式
 既然适当锥的对偶锥仍是适当锥, 则可以使用对偶锥诱导广义不等式. 设 $K$ 是适当锥, 则 $K^*$ 诱导的广义不等式定义为
 $ 
-x lt.eq_(K^*) y quad <=> quad y - x in K^*
+x lt.eq_(K^*) y quad <==> quad y - x in K^*
 $
 使用对偶广义不等式的好处是, 对偶锥始终是闭且凸的, 并可将一个偏序问题转换为满足一个偏序条件的全序问题.
 
@@ -1149,6 +1152,7 @@ $
 $
 也就是 *相对熵函数 (Relative Entropy Function)* 是凸函数.
 === 共轭函数
+<fenchel-conjugate>
 适当函数 $f: RR^n -> macron(RR)$ 的 *Fenchel 共轭函数 (Fenchel Conjugate Function)* 定义为
 $
   f^*(y) = sup_(x in RR^n) (y^T x - f(x))
@@ -1259,7 +1263,7 @@ $
   $
   将上面两个不等式结合起来, 可得
   $
-    theta f_0(y) + (1 - theta) f_0(x^*) gt.eq f_0(x^*) => f_0(y) - f_0(x^*) gt.eq 0
+    theta f_0(y) + (1 - theta) f_0(x^*) gt.eq f_0(x^*) ==> f_0(y) - f_0(x^*) gt.eq 0
   $
   因为 $y$ 是任意可行点, 所以 $x^*$ 是全局极小点.
 ]
@@ -1511,7 +1515,7 @@ $
   因此, 弱对偶定理 $g(lambda, nu) <= p^*$ 的直觉就是:
   - $p^*$ 是在严格遵守规则下的最低成本
   - $g(lambda, nu)$ 是在某套惩罚规则下的最低成本
-  显然, 即使在考虑惩罚的情况下, 我们也不可能比严格遵守规则时的最低成本更低. 这就是为什么 $g(lambda, nu)$ 总是小于等于 $p^*$.
+  显然, 即使在考虑惩罚的情况下, 我们也一定比严格遵守规则的更有优势. 这就是为什么 $g(lambda, nu)$ 总是小于等于 $p^*$.
 
   对偶间隙 $p^* - q^*$ 衡量了惩罚机制的不完美程度, 在某些 "好" 的情况下 (比如说凸优化), 对偶间隙为零, 即我们可以通过适当的惩罚机制完全恢复原始问题的最优解; 但是大部分情况下, 对偶间隙大于零, 这意味着通过惩罚机制得到的解可能无法完全达到原始问题的最优水平.
 ]
@@ -1552,7 +1556,144 @@ $
   $
     g(lambda, nu) = inf_(x in RR^n) f(x) = -f^*(0).
   $
-  这里 $f^*(y)$ 是函数 $f(x)$ 的 Fenchel 共轭函数.
+  这里 $f^*(y)$ 是函数 $f(x)$ 的 Fenchel 共轭函数 (见 @fenchel-conjugate).
 
   我们成功地将一个在 $x$ 空间中带约束的最小化问题 (原问题 $p^*$), 转化为一个在 $(lambda, nu)$ 空间中不带约束的最大化问题 (对偶问题 $q^*$). 这个转化的桥梁就是 Fenchel 共轭函数, 它将原问题的复杂性封装在了对偶函数 $g(lambda, nu)$ 中.
+]
+
+=== 弱对偶性和强对偶性
+弱对偶性 $g(lambda, nu) <= p^*$ 总是成立的, 它可以导出复杂问题的非平凡下界, 但是不能给出最优解. 在某些 "好" 的情况下, 我们可以得到强对偶性, 即存在一组 $(lambda^*, nu^*)$, 使得
+$
+  g(lambda^*, nu^*) = p^*
+$
+它 "通常" 对凸优化问题成立.
+
+=== 隐式约束
+考虑带边界约束的线性规划问题, 其原问题
+$
+  min &quad c^T x \
+  "s.t." &quad A x = b \
+  &quad -bold(1) <= x <= bold(1)
+$
+其 Lagrange 函数为
+$
+  L(x, nu, lambda_1, lambda_2) = c^T x + nu^T (A x - b) + lambda_1^T (x - bold(1)) + lambda_2^T (-x - bold(1))
+$
+其中 $lambda_1, lambda_2 >= 0$. 先求 $L$ 关于 $x$ 的极小值:
+$
+  nabla_x L(x, nu, lambda_1, lambda_2) = c + A^T nu + lambda_1 - lambda_2 = 0
+$
+利用这个关系可以把 $x$ 消去, 得到对偶函数
+$
+  g(nu, lambda_1, lambda_2) &= L(x, nu, lambda_1, lambda_2) \
+  &= c^T x + nu^T (A x - b) + lambda_1^T (x - bold(1)) + lambda_2^T (-x - bold(1)) \
+  &= - nu^T b - lambda_1^T bold(1) - lambda_2^T bold(1)
+$
+我们的对偶问题就是
+$
+  max_(nu, lambda_1, lambda_2) &quad - nu^T b - lambda_1^T bold(1) - lambda_2^T bold(1) \
+  "s.t." &quad c + A^T nu + lambda_1 - lambda_2 = 0 \
+  &quad lambda_1, lambda_2 >= 0
+$
+我们发现在这种情况下, 对偶变量反而变多了. 为了避免这个问题, 我们可以把边界约束 *隐式* 地包含在目标函数中, 即引入示性函数
+$
+  min &quad f_0(x) = cases(
+    c^T x\, &quad -bold(1) <= x <= bold(1), 
+    +oo\, &quad "otherwise"
+  ) \
+  "s.t." &quad A x = b
+$
+这时候对偶函数变为
+$
+  g(nu) &= inf_(x in RR^n) [ f_0(x) + nu^T (A x - b) ] \
+  &= inf_(-bold(1) <= x <= bold(1)) [ c^T x + nu^T (A x - b) ] \
+  &= inf_(-bold(1) <= x <= bold(1)) [ (c + A^T nu)^T x - nu^T b ] \
+  &= - nu^T b + inf_(-bold(1) <= x <= bold(1)) (c + A^T nu)^T x \
+  &= - nu^T b - norm(c + A^T nu)_1
+$
+因此, 对偶问题为
+$
+  max_(nu) &quad - nu^T b - norm(c + A^T nu)_1
+$
+=== 带广义不等式约束优化问题
+回顾一下适当锥 (@proper-cone) 的定义: 设 $cal(K) subset RR^n$ 是一个锥, 如果 $cal(K)$ 是闭的, 有非空的内部, 且不包含任何直线, 则称 $cal(K)$ 为 *适当锥 (Proper Cone)*. 适当锥可以诱导出 *广义不等式 (@generalized-inequality)*, 它定义了全空间上的偏序关系
+$
+  x prec.curly.eq_(cal(K)) y <==> y - x in cal(K)
+$
+特别地, $cal(K) = RR^n_+$ 诱导出逐元素不等式, $cal(K) = cal(S)_+^n$ 诱导出矩阵半正定序.
+
+通过广义不等式, 我们定义了 *对偶锥 (@dual-cone)*:
+$
+  cal(K)^* = { y in Omega : angle.l x, y angle.r >= 0, forall x in cal(K) }
+$
+对于 $cal(K) = RR^n_+$ 和 $cal(K) = cal(S)_+^n$ 诱导出的对偶锥分别等于其本身, 这类锥被称为 *自对偶锥*.
+
+对偶锥可以帮忙构造广义不等式约束的拉格朗日函数. 考虑如下优化问题:
+$
+  min &quad f_0(x) \
+  "s.t." &quad c_i (x) prec.curly.eq_(cal(K)_i) 0, quad i in cal(I) \
+  &quad c_i (x) = 0, quad i in cal(E)
+$
+其 Lagrange 函数为
+$
+  L(x, lambda, nu) = f_0(x) + sum_(i in cal(I)) angle.l lambda_i, c_i (x) angle.r + sum_(i in cal(E)) nu_i c_i (x)
+$
+其中 $lambda_i in cal(K)_i^*$ 是与广义不等式约束对应的拉格朗日乘子. 其 Lagrange 对偶函数为
+$
+  g(lambda, nu) &= inf_(x in RR^n) L(x, lambda, nu), quad lambda_i in cal(K)_i^*, nu_i in RR \
+$
+
+== 带约束凸优化问题
+=== 一般形式
+$
+  min_(x in cal(D)) &quad f_0(x) \
+  "s.t." &quad c_i (x) lt.eq 0, quad i = 1, dots.h, m \
+  &quad A x = b
+$ 其中 $f_0$ 是适当的凸函数, $cal(D)$ 是 $x$ 的自然域, $c_i$ 是凸函数, $A in RR^(p times n)$, $b in RR^p$.
+=== Slater 约束品性与强对偶原理
+*相对内点*: 给定集合 $cal(D)$, 其相对内点定义为
+$
+  "relint" cal(D) = { x in cal(D) : exists epsilon > 0, "s.t." B(x, epsilon) inter "affine" cal(D) subset.eq cal(D) }
+$
+其中 $"affine" cal(D)$ 是包含 $cal(D)$ 的最小仿射集 (仿射包):
+$
+  "affine" cal(D) = {x | x = sum_(i = 1)^k theta_i x_i, quad x_i in cal(D), space sum_(i = 1)^k theta_i = 1 }
+$
+
+比如说, 在 $RR^2$ 中, 一条线段是没有内点的, 因为它没有宽度, 线段上的点的开球必然包含线段外的点. 但是如果我们从它的仿射包 (即包含该线段的整条直线) 来看, 线段上的点就有相对内点, 因为在直线上, 线段上的点的开球与直线的交集仍然包含在线段内. 
+
+*Slater 约束品性*: 如果存在 $x in "relint" cal(D)$, 使得对于任意 $i = 1, dots.h, m$, 有 $c_i (x) < 0$, 且 $A x = b$, 则称该优化问题满足 *Slater 约束品性 (Slater's Condition)*.
+
+*若凸优化问题满足 Slater 约束品性, 则强对偶性成立*.
+
+#showybox(
+  title: "Slater 约束品性: 可行域内部有 \"喘息空间\"",
+  frame: frameSettings,
+  breakable: true
+)[
+  想象在一个被不等式约束围起来的区域 (可行域) 里找最小值, 并假设这个区域 "很窄" (比如所有可行点都恰好在某个约束等于 0 的边界上, 或者是紧贴这个边界).
+
+  我们之前提到, Lagrange 对偶函数通过给违反约束 ($c_i (x) > 0$) 的点施加惩罚 (通过 $lambda_i > 0$ 控制) 来帮助我们找到最优解. 如果存在一个严格可行点 (即满足 $c_i (x) < 0$ 的点), 那么对于某些 $lambda$, Lagrange 函数可以在该点取到一个合理的值, 而让对偶函数接近原始问题的最优值.
+
+  但是如果所有可行点都满足某些 $c_i (x) = 0$, Lagrange 函数可能被迫在这些边界点取值, 这限制了我们通过调整 $lambda$ 来优化对偶函数的能力. 这就像是在一个狭窄的走廊里寻找最优解, 你没有足够的空间来 "呼吸" 和调整你的策略.
+
+  举一个经典的例子, 考虑优化问题
+  $
+    min_x &quad exp(-x) \
+    "s.t." &quad x^2/y <= 0, \
+    &quad y > 0.
+  $
+
+  该问题的可行域实际上是 $x = 0, y > 0$ 的集合, 因为只有在 $x = 0$ 时, $x^2/y <= 0$ 才成立, 所以原问题的最优值为 $p^* = 1$. 现在我们考虑其 Lagrange 函数:
+  $
+    L(x, y, lambda) = exp(-x) + lambda (x^2/y), quad lambda >= 0, y > 0.
+  $
+  对偶函数为
+  $
+    g(lambda, y) &= inf_(x in RR) L(x, y, lambda) \
+    &= inf_(x in RR) [ exp(-x) + lambda (x^2/y) ] \
+  $
+  这里包含了两项, 其中 $exp(-x)$ 的下确界是 $0$; 而 $lambda (x^2/y)$ 的下确界也是 $0$. 我们取 $x > 0$ 和 $y = x^3$, 则当 $x -> +oo$ 时, 这两项可以同时趋近于 $0$. 因此我们恒有 $g(lambda, y) = 0$ 对任意 $lambda >= 0$ 和 $y > 0$. 这就导致对偶问题 $max g(lambda, y)$ 的最优值为 $q^* = 0$, 从而产生了对偶间隙 $p^* - q^* = 1$.
+
+  在这个例子中, 可行域是一条没有 "喘息空间" 的线 (所有点都在边界上), 而我们在优化对偶函数时无法利用任何严格可行点来调整 Lagrange 乘子, 导致对偶间隙的产生. 这正是 Slater 约束品性所要避免的情况. 
 ]
