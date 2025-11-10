@@ -131,3 +131,95 @@ $
   x y^(p + 1) z = 1^(p + p n) = 1^(p (n + 1))
 $
 由于 $n >= 1$, 则 $n + 1 >= 2$, 因此 $p (n + 1)$ 不是素数, 即 $x y^(p + 1) z in.not L$. 这与泵引理的条件矛盾. 因此 $L$ 不是正则语言.
+
+#showybox(
+  title: "T5",
+  frame: frameSettings,
+)[
+  极小化如下 DFA
+  #align(center)[
+    #automaton(
+      (
+        A: (B: "a", C: "b"),
+        B: (B: "a", D: "b"),
+        C: (B: "a", C: "b"),
+        D: (B: "a", E: "b"),
+        E: (B: "a", C: "b"),
+      ),
+      initial: "A",
+      final: ("E",),
+      layout: finite.layout.custom.with(positions:(
+        A: (0, 0),
+        B: (3, 0),
+        C: (3, 3),
+        D: (6, 0),
+        E: (10, 3),
+      ))
+    )
+  ]
+]
+
+1. 划分 $0$-等价类: ${A, B, C, D}$, ${E}$.
+
+2. 划分 $1$-等价类
+  - 在输入 a 后, ${A, B, C, D}$ 都不会转移到接受类
+  - 在输入 b 后, ${A, B, C}$ 都不会转移到接受类, 但 $D$ 会转移到接受类
+  因此划分为: ${A, B, C}$, ${D}$, ${E}$.
+
+3. 划分 $2$-等价类
+  - 在输入 aa 或者 ba 后, ${A, B, C}$ 都不会转移到接受类
+  - 在输入 ab 后, ${A, B, C}$ 都不会转移到接受类
+  - 在输入 bb 后, ${A, C}$ 都不会转移到接受类, 但 $B$ 会转移到接受类
+  因此划分为: ${A, C}$, ${B}$, ${D}$, ${E}$.
+
+4. 划分 $3$-等价类
+  - $A, C$ 无法区分
+
+所以极小化后的 DFA 如下:
+#align(center)[
+  #automaton(
+    (
+      AC: (B: "a", AC: "b"),
+      B: (B: "a", D: "b"),
+      D: (B: "a", E: "b"),
+      E: (B: "a", AC: "b"),
+    ),
+    initial: "AC",
+    final: ("E",),
+    layout: finite.layout.custom.with(positions:(
+      AC: (0, 0),
+      B: (3, 0), 
+      D: (6, 0),
+      E: (3, -3),
+    ))
+  )
+]
+
+#showybox(
+  title: "T6",
+  frame: frameSettings,
+)[
+  极小化如下 DFA
+  #align(center)[
+    #automaton(
+      (
+        Q0: (Q1: "0", Q2: "1"),
+        Q1: (Q3: "0", Q4: "1"),
+        Q2: (Q4: "0", Q3: "1"),
+        Q3: (Q5: "0,1"),
+        Q4: (Q5: "0,1"),
+        Q5: (Q5: "0,1"),
+      ),
+      initial: "Q0",
+      final: ("Q1", "Q2", "Q5"),
+      layout: finite.layout.custom.with(positions:(
+        Q0: (0, 0),
+        Q1: (3, 3),
+        Q2: (3, -3),
+        Q3: (6, 3),
+        Q4: (6, -3),
+        Q5: (9, 0),
+      ))
+    )
+  ]
+]
