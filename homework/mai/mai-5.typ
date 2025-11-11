@@ -117,7 +117,104 @@ $
   (c) $min_(x in RR^n) norm(A x - b)_oo$
 ]
 
-*(a)*. 原问题可以改写为
+*(a)* 原问题可以改写为
 $
-  min_(x in RR^n, t in RR^m) sum_(i = 1)^m t_i, quad "s.t." A x = b, -t_i <= x_i <= t_i, i = 1, 2, ..., m
+min_(x in RR^n, t in RR^m) sum_(i=1)^m t_i, quad "s.t." -t_i <= x_i <= t_i, quad A x = b
 $
+其 Lagrange 函数为
+$
+  g(x,t, lambda, mu, nu) &= sum_(i = 1)^m t_i + lambda^T (A x - b) + mu^T (-x - t) + nu^T (x - t) \
+  &= (lambda^T A - mu^T + nu^T) x + (bold(1)^T - mu^T - nu^T) t - lambda^T b
+$ 
+求梯度有
+$
+  nabla_x g = lambda^T A - mu^T + nu^T, quad nabla_t g = bold(1)^T - mu^T - nu^T
+$
+令它们都为 0, 可得
+$
+  mu^T = bold(1)^T - nu^T, quad lambda^T A = mu^T - nu^T = bold(1)^T - 2 nu^T
+$
+代入 Lagrange 函数, 有
+$
+  inf_(x,t) g(x,t, lambda, mu, nu) = - lambda^T b, quad "s.t." cases(
+    lambda^T A + 2 nu^T = bold(1)^T,
+    mu^T + nu^T = bold(1)^T,
+    nu\, mu >= 0
+  )
+$
+约束条件中的第二个式子说明 $nu <= bold(1)$ , 因为 $mu >= 0$. 所以有 $0 <= nu <= bold(1)$. 因此对 $lambda^T A$ 的要求就是 $-bold(1) <= lambda^T A <= bold(1)$. 所以对偶问题为
+$
+  max_(lambda in RR^m) - lambda^T b, quad "s.t." norm(A^T lambda)_oo <= 1
+$
+
+*(b)* 原问题可以改写为
+$
+  min_(x in RR^n, t in RR^m) bold(1)^T t, quad "s.t." -t_i <= a_i^T x - b_i <= t_i
+$
+写出 Lagrange 函数
+$
+  g(x,t, mu, nu) = bold(1)^T t + mu^T (-A x + b - t) + nu^T (A x - b - t) \
+    = ( - mu^T A + nu^T A ) x + ( bold(1)^T - mu^T - nu^T ) t + ( mu^T - nu^T ) b
+$
+求梯度有
+$
+  nabla_x g = - mu^T A + nu^T A, quad nabla_t g = bold(1)^T - mu^T - nu^T
+$
+令它们都为 0, 可得
+$
+  mu^T A = nu^T A, quad mu^T + nu^T = bold(1)^T
+$
+代入 Lagrange 函数, 有
+$
+  inf_(x,t) g(x,t, mu, nu) = ( mu^T - nu^T ) b, quad "s.t." mu^T A = nu^T A, 0 <= mu\, nu <= bold(1)
+$
+这里我们可以令 $lambda = mu - nu$, 其满足 $A^T lambda = 0$ 且 $-bold(1) <= lambda <= bold(1)$. 因此对偶问题为
+$
+  max_(lambda in RR^m) lambda^T b, quad "s.t." A^T lambda = 0, quad norm(lambda)_oo <= 1
+$
+
+*(c)* 原问题可以改写为
+$
+  min_(x in RR^n, t in RR) t, quad "s.t." -t <= a_i^T x - b_i <= t, quad forall i = 1, ..., m
+$
+写出 Lagrange 函数
+$
+  g(x,t, mu, nu) = t + mu^T (-A x + b - t bold(1)) + nu^T (A x - b - t bold(1)) \
+    = ( - mu^T A + nu^T A ) x + ( 1 - mu^T bold(1) - nu^T bold(1) ) t + ( mu^T - nu^T ) b
+$
+求梯度有
+$
+  nabla_x g = - mu^T A + nu^T A, quad nabla_t g = 1 - mu^T bold(1) - nu^T bold(1)
+$
+令它们都为 0, 可得
+$
+  mu^T A = nu^T A, quad mu^T bold(1) + nu^T bold(1) = 1
+$
+也就是
+$
+  A^T (mu - nu) = 0, quad bold(1)^T (mu + nu) = 1
+$
+我们的约束就有
+$
+  sum_(i = 1)^m (mu_i + nu_i) = 1, quad mu_i\, nu_i >= 0
+$
+现在考虑 $mu - nu$ 可能的取值范围, 因为 $mu_i, nu_i >= 0$, 所以有 $-nu_i <= mu_i - nu_i <= mu_i$. 将这两个不等式对 $i$ 求和, 有
+$
+  - sum_(i=1)^m nu_i <= sum_(i=1)^m (mu_i - nu_i) <= sum_(i=1)^m mu_i \
+  ==> -1 <= sum_(i=1)^m (mu_i - nu_i) <= 1
+$
+所以令 $lambda = mu - nu$ , 则有对偶问题
+$
+  max_(lambda in RR^m) lambda^T b, quad "s.t." A^T lambda = 0, quad norm(lambda)_1 <= 1
+$
+
+#showybox(
+  title: "T4",
+  frame: frameSettings,
+)[
+  试举例说明对无约束光滑优化问题, 二阶必要条件不是充分的, 二阶充分条件也不是必要的.
+]
+
+1. *二阶必要条件不是充分的*: 考虑函数 $f(x) = x^3$, 则其在 $x = 0$ 处有一阶导数 $f'(0) = 0$ 和二阶导数 $f''(0) = 0$. 但是 $x = 0$ 不是极值点, 因为在该点附近 $f(x)$ 在 $x < 0$ 时为负, 在 $x > 0$ 时为正.
+
+2. *二阶充分条件不是必要的*: 考虑函数 $f(x) = x^4$, 则其在 $x = 0$ 处有一阶导数 $f'(0) = 0$ 和二阶导数 $f''(0) = 0$. 但是 $x = 0$ 是局部极小点, 因为在该点附近 $f(x) >= 0$ 且仅在 $x = 0$ 处取到最小值 0.
