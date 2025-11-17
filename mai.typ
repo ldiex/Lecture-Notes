@@ -44,15 +44,6 @@
   footer-color: eastern.lighten(80%)
 )
 
-#page(
-)[
-  #align(horizon)[
-    "正则语言" 的大陆:
-    1. 文法 (Grammar) 建造了大陆上的景观
-    2. 机器 (The Acceptor): DFA $<==>$ NFA;  代数 (The Descriptor): 正则表达式. 它们是大陆上的交通工具
-    3. 泵引理 (Pumping Lemma): 大陆上的自然法则, 确定了大陆的边界
-  ]
-]
 
 = 第一章: 机器学习与优化建模
 == 矩阵奇异值分解
@@ -1771,6 +1762,7 @@ $
 则称 $d$ 为 $x$ 在可行域 $cal(X)$ 中的 *切向量 (Tangent Vector)*. 这个定义捕捉了在可行域中, 点 $x$ 的局部几何性质. 所有点 $x$ 在可行域 $cal(X)$ 中的切向量构成的集合称为 $x$ 处的 *切锥 (Tangent Cone)*, 记为 $T_(cal(X)) (x)$.
 
 === 几何最优性条件
+<geometry-optimality-condition>
 对于一般约束优化问题:
 $
   min_(x in RR^n) &quad f_0(x) \
@@ -1795,7 +1787,8 @@ $
 
 #showybox(
   title: "切锥和线性化的可行锥",
-  frame: frameSettings 
+  frame: frameSettings,
+  breakable: true,
 )[
   切锥 $T_(cal(X)) (x)$ 是 *真实的可行方向*. 我们站在可行域 $cal(X)$ 上的点 $x$, 想象所有可能从 $x$ 出发, 并且仍然留在 $cal(X)$ 内部的方向. 这些方向形成了一个锥体, 这个锥体就是切锥.
 
@@ -1807,4 +1800,73 @@ $
   1. 对于等式约束（轨道），它要求方向 $d$ 必须与轨道法向量正交 ($&d^T nabla c_i (x) = 0$), 也就是必须沿着轨道.
 
   2. 对于不等式约束 (墙), 它要求 $d$ 与墙的法向量的夹角不小于 90 度 ($&d^T nabla c_i (x) <= 0$), 也就是必须指向墙内或者沿着墙面.
+
+  线性化可行锥包含了切锥中的所有方向, 但可能还包含一些实际上不可行的方向. 也就是说, $T_(cal(X)) (x) subset.eq cal(F)(x)$.
 ]
+
+=== 线性无关约束品性
+我们需要考虑什么时候切锥和线性化可行锥是相等的. 设点 $x in cal(X)$ 以及相应的积极集 $cal(A)(x)$, 如果集合
+$
+  { nabla c_i (x), quad i in cal(A)(x) }
+$
+是线性无关的, 则称该点满足 *线性无关约束品性 (Linear Independence Constraint Qualification, LICQ)*. 在这种情况下, 有
+$
+  T_(cal(X)) (x) = cal(F)(x)
+$
+
+=== Mangasarian-Fromovitz 约束品性
+这是一个比 LICQ 更弱的约束品性条件. 设点 $x in cal(X)$ 以及相应的积极集 $cal(A)(x)$, 如果存在一个向量 $w in RR^n$, 使得
+$
+  nabla c_i (x)^T w < 0, quad &forall i in cal(A)(x) inter cal(I), \
+  nabla c_i (x)^T w = 0, quad &forall i in cal(E)
+$
+并且等式约束对应的梯度集 ${nabla c_i (x), i in cal(E)}$ 是线性无关的, 则称该点满足 *Mangasarian-Fromovitz 约束品性 (Mangasarian-Fromovitz Constraint Qualification, MFCQ)*. 在这种情况下, 也有
+$
+  T_(cal(X)) (x) = cal(F)(x)
+$
+
+
+#showybox(
+  title: "LICQ & MFCQ",
+  frame: frameSettings,
+  breakable: true,
+)[
+  LICQ 和 MFCQ 都是为了保证一个核心事实: 我们用线性化可行锥 $cal(F) (x)$ 对切锥 $T_(cal(X))$ 的近似是的确的. 当 $T_(cal(X)) (x) = cal(F)(x)$ 时, KKT 条件 (一个基于 $cal(F) (x)$ 的代数系统) 才能准确地描述几何最优性 (基于 $T_(cal(X)) (x)$ 的现实).
+
+  LICQ 提供了一个非常强硬的图像, 它关注的是在最优点 $x^*$ 处, 我们"接触" 到的所有 "墙" ($c_i (x^*) = 0$) 的法向量 ($nabla c_i (x^*)$) 必须是线性无关的. 这个图像是 "干净的", 因为没有任何墙是冗余的, 每一堵墙都提供了独特的约束方向. 在这种情况下, 切锥和线性化可行锥完全吻合, 因为每个约束都以独特的方式影响可行域的形状.
+
+  MFCQ 则提供了另一个更宽松的图像. 它不关心法向量是否 "干净" 或 "冗余", 而只关心是否存在一个 "共识" 方向 $w$, 这个方向能够 "避开" 所有的活跃不等式约束 (即那些 $c_i (x^*) = 0$ 的约束). 具体来说, $w$ 必须与所有活跃不等式约束的法向量形成锐角, 这样我们就能找到一个方向, 沿着这个方向移动, 我们可以 "远离" 这些约束, 在这个空间中是有 "喘息空间" 的. 同时, MFCQ 仍然要求等式约束的法向量是线性无关的, 以确保我们在等式约束定义的轨道上有足够的自由度.
+]
+
+=== 线性约束品性
+另外一个用来保证切锥和线性化可行锥相等的约束品性是 *线性约束品性 (Linear Constraint Qualification, LCQ)*. 如果所有不等式约束 $c_i (x), i in cal(I)$ 都是线性的, 则称该点满足 *线性约束品性 (Linear Constraint Qualification, LCQ)*. 在这种情况下, 也有 $T_(cal(X)) (x) = cal(F)(x)$.
+
+
+=== Farkas 引理
+我们前面提到了几何最优性条件 (@geometry-optimality-condition), 它表明如果 $x^*$ 是一个局部极小点, 则有
+$
+  d^T nabla f_0 (x^*) >= 0, quad forall d in T_(cal(X)) (x^*)
+$
+在约束品性 (CQ) 成立的前提下, 切锥和线性化可行锥相等, 因此上式等价于
+$
+  d^T nabla f_0 (x^*) >= 0, quad forall d in cal(F)(x^*)
+$
+但是这个表述仍然是几何的, 它涉及 "所有" 的 $d$, 没办法直接用于计算. 我们需要一个方法, 把 "与一个锥中的所有向量成非锐角" 这个几何性质, 转换成一个单一的代数方程. 这个工具就是 *极锥 (Polar Cone)*, $cal(F)(x^*)$ 的极锥定义为
+$
+  cal(F)(x^*)^(circle.small) = { y | y^T d >= 0, quad forall d in cal(F)(x^*) }
+$
+这正是我们想要的, 这时候我们的目标就可以被简单地表示为 $nabla f_0 (x^*) in cal(F)(x^*)^(circle.small)$.
+
+*Farkas 引理* 告诉我们，一个由梯度定义的锥 (如 $cal(F)(x^*)$), 它的极锥 $cal(F)(x^*)^(circle.small)$ 恰好可以被这些梯度线性组合而成 (从 "定义" 变为 "生成"). 具体来说, 回顾 $cal(F)(x^*)$ 的定义
+$
+  cal(F)(x^*) = { d | &d^T nabla c_i (x^*) = 0, quad forall i in cal(E); \ &d^T nabla c_i (x^*) <= 0, quad forall i in cal(A)(x^*) inter cal(I) }
+$
+Farkas 引理表明
+$
+  -cal(F)(x^*)^(circle.small) = { sum_(i in cal(E)) nu_i nabla c_i (x^*) + sum_(i in cal(A)(x^*) inter cal(I)) lambda_i nabla c_i (x^*), quad lambda_i >= 0 }
+$
+注意这里前面的负号. 因此, 我们最终得到几何最优性条件的代数表述:
+$
+  nabla f_0 (x^*) + sum_(i in cal(E)) nu_i nabla c_i (x^*) + sum_(i in cal(A)(x^*) inter cal(I)) lambda_i nabla c_i (x^*) = 0, quad lambda_i >= 0
+$
+也就是 KKT 条件中的稳定性条件.

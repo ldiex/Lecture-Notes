@@ -42,6 +42,15 @@
 )
 #set quote(block: true)
 
+#page(
+)[
+  #align(horizon)[
+    "正则语言" 的大陆:
+    1. 文法 (Grammar) 建造了大陆上的景观
+    2. 机器 (The Acceptor): DFA $<==>$ NFA;  代数 (The Descriptor): 正则表达式. 它们是大陆上的交通工具
+    3. 泵引理 (Pumping Lemma): 大陆上的自然法则, 确定了大陆的边界
+  ]
+]
 
 = 数学术语
 == 字符串和语言
