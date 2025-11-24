@@ -190,18 +190,16 @@ $R_(upright("exp")) \( h^(*) \)$ 称为 #strong[Bayes 风险] (Bayes Risk).
 风险是所有可能的算法中期望风险最小的算法所达到的风险水平.
 
 === 近似误差, 估计误差与泛化误差
-记 1. $hat(h)_(cal(H))$ 是基于有限样本集合 $bb(S)$
-根据经验风险最小从有限算法集合 $cal(H)$ 中选出的最佳算法
-(i.e.~经验风险最小). 2. $h_(cal(H))^(*)$ 是基于全体数据集 $bb(D)$
-根据期望风险最小从有限算法集合 $cal(H)$ 中选出的最佳算法
-(i.e.~期望风险最小). 3. 假设 $h^(*)$ 的真实 Bayes 风险为 $R^(*)$
+记 
+1. $hat(h)_(cal(H))$ 是基于有限样本集合 $bb(S)$ 根据经验风险最小从有限算法集合 $cal(H)$ 中选出的最佳算法 (i.e.~经验风险最小). 
+2. $h_(cal(H))^(*)$ 是基于全体数据集 $bb(D)$ 根据期望风险最小从有限算法集合 $cal(H)$ 中选出的最佳算法 (i.e.~期望风险最小). 
+3. 假设 $h^(*)$ 的真实 Bayes 风险为 $R^(*)$
 
 从一般性考虑, 大范围的最优肯定优于子范围的最优, 即:
 $ R^(*) lt.eq R_(upright("exp")) \( h_(cal(H))^(*) \) lt.eq R_(upright("emp")) \( hat(h)_(cal(H)) \) $
 
-我们定义 1. #strong[近似误差 (Approximation Error)];:
-$R_(upright("exp")) \( h_(cal(H))^(*) \) - R^(*)$, 反映了算法集合
-$cal(H)$ 的表达能力.
+我们定义 
+1. #strong[近似误差 (Approximation Error)];: $R_(upright("exp")) \( h_(cal(H))^(*) \) - R^(*)$, 反映了算法集合 $cal(H)$ 的表达能力.
 
 #block[
 #set enum(numbering: "1.", start: 2)
@@ -1870,3 +1868,42 @@ $
   nabla f_0 (x^*) + sum_(i in cal(E)) nu_i nabla c_i (x^*) + sum_(i in cal(A)(x^*) inter cal(I)) lambda_i nabla c_i (x^*) = 0, quad lambda_i >= 0
 $
 也就是 KKT 条件中的稳定性条件.
+
+=== 二阶最优性条件
+
+设 $(x^*, lambda^*)$ 是满足 KKT 条件的可行点和拉格朗日乘子, 定义临界锥为
+$
+  cal(C) (x^*, lambda^*) = { d in cal(F)(x^*) | d^T nabla c_i (x^*) = 0,\ quad forall i in cal(A)(x^*) inter cal(I) "and" lambda_i^* > 0}
+$
+其中 $cal(F)(x^*)$ 是点 $x^*$ 处的线性化可行锥. 临界锥是线性化可行方向锥的子集, 它描述了在最优点 $x^*$ 处, 沿着这些方向移动不会违反任何活跃约束 (即那些 $c_i (x^*) = 0$ 且对应的拉格朗日乘子 $lambda_i^* > 0$ 的约束).
+
+现在我们可以给出二阶最优性条件:
+- *必要条件*: 如果 $x^*$ 是局部极小点, 则
+$
+  d^T nabla^2_(x x) L(x^*, lambda^*) d >= 0, quad forall d in cal(C) (x^*, lambda^*)
+$ 
+- *充分条件*: 如果存在 $(x^*, lambda^*)$ 满足 KKT 条件, 且
+$
+  d^T nabla^2_(x x) L(x^*, lambda^*) d > 0, quad forall d in cal(C) (x^*, lambda^*), d != 0
+$
+则 $x^*$ 是严格局部极小点.
+
+== 总结
+#align(center)[
+  #table(
+    columns: (auto, auto, 4em),
+    inset: 10pt,
+    align: horizon,
+    [*问题类型*], [*最优性条件*], [*约束品性*],
+    [无约束凸优化], [*充要*: $nabla f(x^*) = 0$], [无],
+    [无约束可微优化], [*必要*: $nabla f(x^*) = 0$, *充分*: $nabla^2 f(x^*)$ 正定], [无],
+    [无约束非光滑凸优化], [*充要*: $0 in partial f(x^*)$], [无],
+    [带约束光滑优化], [*必要*: KKT 条件], [LICQ, \ MFCQ 等],
+    [带约束凸优化], [*必要且充分*: KKT 条件], [Slater 条件],
+  )
+]
+
+= 梯度下降算法
+== 线搜索准则
+== 线搜索一般收敛性分析
+== 
