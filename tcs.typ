@@ -1,9 +1,12 @@
 #import "@preview/showybox:2.0.4": showybox
-
 #import "@preview/ilm:1.4.1": *
 #import "@preview/finite:0.5.0": automaton
 #import "@preview/finite:0.5.0"
 #import "@preview/tdtr:0.3.0" : *
+#import "@preview/algorithmic:1.0.6"
+#import algorithmic: style-algorithm, algorithm-figure
+
+#show: style-algorithm
 
 #set text(font:("Libertinus Serif", "Source Han Serif SC"))
 
@@ -988,6 +991,7 @@ $
 5. 所以新文法产生的语言 $L(G') = L(G) union { epsilon }$, 且 $G'$ 的类型与 $G$ 相同.
 
 === 如何从一个语言中移除空语句
+<remove-null-sentence>
 如果一个语言 $L$ 包含空语句, 则我们可以通过以下步骤构造一个新的文法 $G'$ 来生成不包含空语句的语言 $L' = L \\ { epsilon }$, 其类型保持不变:
 1. 如果 $epsilon in L$, 则必须存在一个文法 $G$ 生成 $L$ 且包含一个产生式 $S -> epsilon$, 其中 $S$ 是 $G$ 的开始符号.
 2. 利用定理 1, 构造一个等价的文法 $G''$ 使得 $G''$ 的开始符号 $S'$ 不出现在任何产生式的右部.
@@ -1111,3 +1115,157 @@ $
 如果 $G$ 是一个 $s$-文法, 则对于 $forall w in G$, $w$ 的解析可以在 $O(n)$ 时间内完成.
 
 == 上下文无关语法的化简
+=== 为什么要化简?
+上面我们提到简单文法更容易被解析, 所以为了提高解析效率, 我们希望能把一个上下文无关文法化简为等价的, 满足一定约束条件的形式.
+
+=== 替换规则
+设在一个 CFG 的产生式集合 $P$ 中, 存在一个产生式 $A -> x_1 B x_2$. 其中 $A != B$ 且有 $B -> y_1 | y_2 | dots.c | y_n$ 是 $P$ 中所有以 $B$ 为左部的产生式. 则我们可以用以下步骤来替换 $B$:
+
+1. 删除产生式 $A -> x_1 B x_2$.
+2. 添加产生式 $A -> x_1 y_1 x_2 | x_1 y_2 x_2 | dots.c | x_1 y_n x_2$.
+
+可以证明, 替换前后的文法是等价的.
+
+=== 去除无用符号
+给定一个 CFG $G = ( V, T, P, S )$, 变量 $A in V$ 被称为 *有用的* (Useful), 当且仅当存在字符串 $w in L(G)$, 满足
+$
+  S =>_(G^*) x A y =>_(G^*) w.
+$
+换言之, $A$ 有用当且仅当它出现在某一个字符串的推导过程中, 否则称 $A$ 是 *无用的* (Useless). 由此, $A$ 是无用的存在两种可能:
+1. $A$ 无法生成任何终结符串, 即不存在字符串 $w in T^(*)$ 使得 $A =>_(G^*) w$.
+2. $A$ 无法从开始符号 $S$ 推导出来, 即不存在字符串 $w_1, w_2 in ( V union T )^(*)$ 使得 $S =>_(G^*) w_1 A w_2$.
+
+根据这两个情况, 我们可以设计两个算法来去除无用符号:
+
+#algorithm-figure(
+  "去除无法派生字符串的变量符号",
+  vstroke: .5pt + luma(200),
+  {
+    import algorithmic: *
+    Procedure(
+      "RemoveNonGeneratingSymbols",
+      ($V$, $P$, $T$, $S$),
+      {
+        Assign[$V_"old"$][$emptyset$]
+        Assign[$V_"new"$][${A | A -> w in P "and" w in T^*}$]
+        LineBreak
+        While(
+          $V_"old" != V_"new"$,
+          {
+            Assign[$V_"old"$][$V_"new"$]
+            Assign[$V_"new"$][$V_"old" union {A | A -> x in P "and" x in (V_"old" union T)^*}$]
+          },
+        )
+
+        LineBreak
+        Assign[$V'$][$V_"new"$]
+        Assign[$P'$][${A -> w in P | A in V' "and" w in (V' union T)^*}$]
+        Return[$V'$, $P'$, $T$, $S$]
+      },
+    )
+  }
+)
+
+这里一开始 $V_"new"$ 被初始化为所有能一步生成终结符串的变量. 然后, 在每次迭代中, 我们将 $V_"new"$ 更新为所有能生成由 $V_"old"$ 和 $T$ 组成的字符串的变量. 这个过程持续进行, 直到 $V_"new"$ 不再变化为止. 这是一个从派生树的叶子节点向上收集变量的过程. 
+
+#algorithm-figure(
+  "去除无法到达的符号",
+  vstroke: .5pt + luma(200),
+  {
+    import algorithmic: *
+    Procedure(
+      "RemoveUnreachableSymbols",
+      ($V$, $P$, $T$, $S$),
+      {
+        Assign[$V_"old"$][$emptyset$]
+        Assign[$T_"old"$][$emptyset$]
+        Assign[$V_"new"$][${S} union {A | S -> x A y in P}$]
+        Assign[$T_"new"$][${a | S -> x a y in P}$]
+        LineBreak
+        While(
+          $V_"old" != V_"new" or T_"old" != T_"new"$,
+          {
+            Assign[$V_"old"$][$V_"new"$]
+            Assign[$T_"old"$][$T_"new"$]
+            Assign[
+              $V_"new"$][
+              $V_"old" union {B | A in V_"old" "and" A -> x B y in P "and" B in V}$
+            ]
+            Assign[
+              $T_"new"$][
+              $T_"old" union {a | A in V_"old" "and" A -> x a y in P "and" a in T}$
+            ]
+          },
+        )
+
+        LineBreak
+        Assign[$V'$][$V_"new"$]
+        Assign[$T'$][$T_"new"$]
+        Assign[$P'$][${A -> alpha in P | A in V' and alpha in (T' union V')^*}$]
+        Return[$V'$, $P'$, $T'$, $S$]
+      },
+    )
+  }
+)
+
+需要注意的是, 为了删去 CFG 中的所有无用变量, 我需要先使用算法1, 去除无法派生字符串的变量符号, 然后再使用算法2, 去除无法到达的符号. 这是因为一个变量可能既无法生成终结符串, 又无法从开始符号推导出来. 只有先去除那些无法生成终结符串的变量, 才能确保在去除无法到达的符号时不会遗漏任何无用变量.
+
+=== 去除 $epsilon$-产生式
+参见 @remove-null-sentence
+
+=== 去除单一产生式
+在一个 CFG $G = ( V, T, P, S )$ 中, 如果存在一个产生式 $A -> B$, 其中 $A, B in V$, 则称其为 *单一产生式* (Unit Production). 我们可以通过以下步骤来去除所有单一产生式:
+1. 对于每个变量 $A in V$, 找出所有能通过一系列单一产生式从 $A$ 推导出来的变量集合 $"Unit"(A)$.
+2. 对于每个变量 $A in V$ 和每个变量 $B in "Unit"(A)$, 将 $B$ 的所有非单一产生式添加到 $A$ 的产生式集合中.
+3. 删除所有单一产生式.
+
+=== CFG 化简步骤
+1. 去除空产生式.
+2. 去除单一产生式.
+3. 去除无用符号 (先去除无法生成字符串的变量, 再去除无法到达的符号).
+
+= CFG 的规范形式 (Normal Forms)
+== Chomsky 范式 (CNF)
+=== 定义
+如果一个 CFG $G = ( V, T, P, S )$ 的所有产生式都满足以下形式之一:
+1. $A -> B C$, 其中 $A, B, C in V$
+2. $A -> a$, 其中 $A in V$, $a in T$
+则称 $G$ 是 Chomsky 范式 (CNF).
+
+
+=== 转换为 CNF
+对于任意一个 CFG $G = ( V, T, P, S )$, 我们可以通过以下步骤将其转换为等价的 CNF 文法 $G' = ( V', T', P', S' )$:
+1. 确保 $G$ 不存在空产生式和单一产生式. 如果存在, 则先使用前面提到的化简算法去除它们.
+2. 对于每个产生式 $A -> a_1 a_2 ... a_n$ (其中 $n >= 2$ 且 $a_i in T$), 将其替换为一系列产生式:
+   - $A -> X_1 X_2 ... X_n$, 其中每个 $X_i$ 是一个新的变量, 并添加产生式 $X_i -> a_i$ 到 $P'$.
+3. 对于每个产生式 $A -> B_1 B_2 ... B_n$ (其中 $n >= 3$ 且 $B_i in V$), 将其替换为一系列产生式:
+   - $A -> B_1 Y_1,  Y_1 -> B_2 Y_2, ..., Y_(n-2) -> B_(n-1) B_n$, 其中每个 $Y_i$ 是一个新的变量.
+
+=== CYK 算法
+CYK 算法是一种用于解析上下文无关文法的动态规划算法. 它要求输入的文法必须是 Chomsky 范式 (CNF). 该算法通过构建一个解析表来记录子字符串的可能生成变量, 最终确定整个字符串是否能由开始符号生成.
+
+#showybox(
+  title: "CNF 的二叉树结构",
+  frame: frameSettings
+)[
+  由于 CNF 的产生式形式限制了每次替换只能生成两个变量或一个终结符, 因此其派生树必然是二叉树结构. 它的叶子节点对应终结符, 内部节点对应变量.
+
+  正因为 CNF 的这种二叉树结构, CYK 算法能够高效地构建解析表, 通过动态规划的方法逐步填充表格, 最终确定字符串是否能由开始符号生成.
+]
+
+== Greibach 范式 (GNF)
+=== 定义
+如果一个 CFG $G = ( V, T, P, S )$ 的所有产生式都满足以下形式
+$ A -> a x, $ 其中 $A in V$, $a in T$, $x in V^*$
+则称 $G$ 是 Greibach 范式 (GNF).
+
+=== 转换为 GNF
+对于任意一个 CFG $G = ( V, T, P, S )$, 我们可以通过以下步骤将其转换为等价的 GNF 文法 $G' = ( V', T', P', S' )$:
+1. 确保 $G$ 不存在空产生式和单一产生式. 如果存在, 则先使用前面提到的化简算法去除它们.
+2. 对变量进行编号, 使得 $V = { A_1, A_2, ..., A_n }$.
+3. 对于每个产生式 $A_i -> A_j x$ (其中 $j <= i$), 将 $A_j$ 替换为其所有产生式的右部, 即:
+   - 如果 $A_j -> a y$ (其中 $a in T$, $y in V^*$), 则添加产生式 $A_i -> a y x$.
+   - 如果 $A_j -> B z$ (其中 $A_k in V$, $z in V^*$), 则添加产生式 $A_i -> A_k z x$. 这里的 $k > i$.
+4. 对于每个产生式 $A_i -> a x$ (其中 $a in T$), 保持不变.
+5. 重复步骤 3 和 4, 直到所有产生式都满足 GNF 的形式.
+
