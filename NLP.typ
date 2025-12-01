@@ -3,6 +3,8 @@
 #import "@preview/ilm:1.4.1": *
 #import "@preview/finite:0.5.0": automaton
 #import "@preview/finite:0.5.0"
+#import "@preview/fletcher:0.5.8" as fletcher: diagram, node, edge
+#import "@preview/tdtr:0.3.0" : *
 
 #set text(font: ("Libertinus Serif", "Source Han Serif SC"))
 
@@ -296,3 +298,178 @@ $
 词性标注任务旨在为文本中的每个词分配一个正确的词性标签, 描述其在句子中的语法角色. 但是一个词的词性高度依赖于其上下文环境, 因此词性标注通常被视为一个序列标注问题.
 
 所以我们一般使用隐马尔可夫模型 (HMM) 或条件随机场 (CRF) 等序列模型来进行词性标注. 这些模型能够捕捉词与其上下文之间的依赖关系, 提高标注的准确性.
+
+= 语义分析
+== 语义分析的核心挑战: 歧义问题
+句法分析为我们提供了句子的结构, 但要真正理解其含义, 我们必须应对语言中普遍存在的歧义和语境依赖性.
+
+*词义悖论*: 相同的句法结构, 甚至看似相反的词, 却可以表达相同的意思. 如 "中国队大败美国队" 和 "中国队大胜美国队" 都可以表示中国队在比赛中获胜. 
+
+*语境依赖*: "夏天能穿多少穿多少" 和 "冬天能穿多少穿多少", 这两句话在不同的季节下有不同的含义.
+
+*知识依赖*: "中国足球谁也打不过" 和 "中国乒乓球谁也打不过", 理解这两个例子需要对中国足球和乒乓球的历史和现状有一定了解.
+
+== 语义网络 (Semantic Network)
+语义网络是一种通过有向图来表达知识和描述语义的方法. 它由代表实体或概念的 *节点*, 和代表实体间关系的 *边* 组成. 节点可以是具体的事物 (如 "苹果"), 抽象的概念 (如 "水果"), 或其他语义单位 (如 "吃"). 边则表示节点之间的语义关系 (如 "是", "属于", "包含").
+
+#diagram(
+	node-defocus: 0,
+	spacing: (1cm, 2cm),
+	edge-stroke: 2pt,
+	mark-scale: 70%,
+	node-fill: luma(97%),
+	node-outset: 3pt,
+	node((-2,-1), "老虎"),
+	node((2,-1), "鸟"),
+	node((4.5,-1), "翅膀"),
+	node((0,0), "动物"),
+	node((-5,1), "桌面"),
+	node((-2,1), "桌子"),
+	node((2,1), "鱼"),
+	node((4.5,1), "水"),
+	{
+		let quad(a, b, label, paint, ..args) = {
+			paint = paint.darken(25%)
+			edge(a, b, text(paint, label), "-|>", stroke: paint, label-side: center, ..args)
+		}
+
+		quad((-2,-1), (0,0), "IS-A (是一种)", blue)
+    quad((2,-1), (0,0), "IS-A (是一种)", blue)
+    quad((-5,1), (-2,1), "PART-OF", orange)
+    quad((-2,1), (0,0), "IS-A (是一种)", blue)
+    quad((2,1), (0,0), "IS-A (是一种)", blue)
+    quad((2,1), (4.5,1), "LIVE-IN", green, label-pos: 0.4)
+    quad((2, -1), (4.5,-1), "HAVE", purple, label-pos: 0.4)
+	},
+)
+
+== 语义角色标注 (Semantic Role Labeling, SRL)
+=== 概述
+SRL 旨在识别句子中的谓词 (通常为动词), 并分析句子中的其他成分与该谓词之间的语义关系. 比如说谁 (Who) 在何时 (When) 何地 (Where) 对谁 (Whom) 做了什么 (What) 以何种方式 (How).
+
+比如说对于如下句子:
+#align(center)[
+  #set text(weight: "bold")
+  #text("他们 (Agent)", blue) #text("昨天 (Time)", orange) #text("在北京 (Location)", green) \ #text("讨论 (Predicate)", red) 了 #text("方案 (Patient)", purple)
+]
+
+SRL 不试图理解整个世界, 而是专注与精确解析句子中的语义结构, 以支持更高层次的自然语言理解任务.
+
+=== 命题库 (PropBank)
+要训练统计 SRL 模型, 我们需要大规模的标注数据. PropBank 在宾夕法尼亚树库 (Penn Treebank) 的基础上, 为每个动词添加了语义角色标注. 它定义了一套通用的角色标签, 如 ARG0 (施事), ARG1 (受事), ARG2 (工具/方式), 以及修饰语 (AM-LOC, AM-TMP 等). PropBank 的目标是让具有相似语义角色的成分或得一致的标签, 以便模型能够学习到通用的语义模式.
+
+比如说对于 "It operates stores mostly in Iowa and Nebraska." 
+
+#align(center)[
+  #set text(weight: "bold", purple)
+  #tidy-tree-graph(
+    spacing: (20pt, 20pt),
+    text-size: 13pt, 
+    node-inset: 6pt
+  )[
+    - S
+      - NP
+        - ARG0
+          - "It"
+      - VP
+        - Predicate
+          - "operates"
+
+        - NP
+          - ARG1
+            - "stores"
+        - PP
+          - ARGM-LOC
+            - "mostly in Iowa and Nebraska" 
+  ]
+]
+
+其中
+- *S* 代表句子 (Sentence)
+- *NP* 代表名词短语 (Noun Phrase)
+- *VP* 代表动词短语 (Verb Phrase)
+- *PP* 代表介词短语 (Prepositional Phrase)
+
+=== 核心论元
+在 PropBank 中, 每个动词都有一个对应的 *论元框架 (Argument Frame)*, 定义了该动词的核心论元及其语义角色. 
+- *ARG0*: 通常表示动作的施事 (Agent) 或执行者.
+- *ARG1*: 通常表示动作的受事 (Patient) 或主题 (Theme).
+- *ARG2*: 通常表示工具 (Instrument), 方式 (Manner), 或受益者 (Beneficiary).
+- *ARG3*: 动作的起点 (Source)
+- *ARG4*: 动作的结束点 (Goal)
+
+=== 辅助性/修饰性论元
+除了核心论元外, PropBank 还定义了一些辅助性或修饰性论元, 用于描述动作的时间 (AM-TMP), 地点 (AM-LOC), 方式 (AM-MNR), 原因 (AM-CAU) 等附加信息.
+- *AM-TMP*: 描述动作发生的时间.
+- *AM-LOC*: 描述动作发生的地点.
+- *AM-MNR*: 描述动作的方式或手段.
+- *AM-ADV*: 描述动作的频率、程度等附加信息.
+
+=== 基于短语结构树的 SRL 标注
+SRL 标注通常基于句子的短语结构树 (Phrase Structure Tree), 通过识别与谓词相关的短语节点来分配语义角色. 它的核心过程是:
+1. *候选论元剪枝 (Puning)*: 从谓词节点开始向上遍历短语结构树, 收集可能的论元短语节点.
+2. *分类 (Classification)*: 使用分类模型 (如最大熵模型, 条件随机场等) 为每个候选论元分配语义角色标签.
+
+比如说对于下面的句子: "外商投资企业发挥了作用."
+
+#align(center)[
+  #set text(weight: "bold", purple)
+  #tidy-tree-graph(
+    spacing: (20pt, 20pt),
+    text-size: 13pt, 
+    node-inset: 6pt
+  )[
+    - S
+      - NP
+        - ARG0
+          - "外商投资企业"
+      - VP
+        - Predicate
+          - "发挥了"
+        - NP
+          - ARG1
+            - "作用"
+  ]
+]
+
+我们的标注过程为:
+1. 从谓词 "发挥了" 开始, 向上遍历短语结构树, 识别出候选论元短语节点 "外商投资企业" 和 "作用".
+2. 使用分类模型为 "外商投资企业" 分配 ARG0 (施事), 为 "作用" 分配 ARG1 (受事).
+
+=== 基于依存关系的 SRL 标注
+除了基于短语结构树的方法外, 依存关系 (Dependency Relations) 也可以用于 SRL 标注. 依存关系直接表示词与词之间的语法关系, 可以更直观地捕捉谓词与其论元之间的联系.
+
+比如说我们有如下句子: "警方正在详细调查事故原因", 其依存关系图如下:
+
+#diagram(
+  node-defocus: 0,
+  spacing: (2cm, 2cm),
+  edge-stroke: 2pt,
+  mark-scale: 70%,
+  node-fill: luma(97%),
+  node-outset: 3pt,
+  let pos_core = (1.5, 0),
+  node(pos_core, "调查"),
+  node((-1,-1), "警方"),
+  node((0,-1), "正在"),
+  node((1,-1), "详细"),
+  node((2,-1), "事故"),
+  node((3,-1), "原因"),
+  {
+    let quad(a, b, label, paint, ..args) = {
+      paint = paint.darken(25%)
+      edge(a, b, text(paint, label), "-|>", stroke: paint, label-side: center, ..args)
+    }
+
+    quad(pos_core, (-1,-1), "sbj", blue)
+    quad(pos_core, (0,-1), "vmod", orange)
+    quad(pos_core, (1,-1), "vmod", green)
+    quad(pos_core, (2,-1), "obj", red)
+    quad(pos_core, (3,-1), "obj", purple)
+  },
+)
+
+因此我们可以把 "警方" 标注为 ARG0 (施事), "事故原因" 标注为 ARG1 (受事), "正在详细" 标注为 AM-MNR (方式).
+
+=== SRL 作为序列标注问题
+SRL 也可以被视为一个序列标注问题, 类似于词性标注或命名实体识别. 我们可以为句子中的每个词分配一个语义角色标签, 并使用序列模型 (如条件随机场 CRF, 循环神经网络 RNN 等) 来捕捉词与其上下文之间的依赖关系.
