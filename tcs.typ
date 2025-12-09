@@ -1095,6 +1095,7 @@ $
 *固有二义性* (Inherently Ambiguous) 的语言是指那些无论用什么文法来描述, 都无法避免二义性的语言.
 
 == 解析 (Parsing)
+<parsing>
 解析是给定 $w in L(G)$, 确定如何从开始符号 $S$ 推导出 $w$ 的过程. 解析的结果通常表示为一个派生树, 显示了从 $S$ 到 $w$ 的推导步骤.
 
 最直观的解析方法就是先写出文法 $G$ 的所有可能派生, 检查是否能得到 $w$. 这种方法叫做 *穷举解析* (Exhaustive Parsing), 但它效率极低, 因为可能的派生数量随着句子长度呈指数增长. 可以分为自顶向下解析 (Top-Down Parsing) 和自底向上解析 (Bottom-Up Parsing) 两大类.
@@ -1448,3 +1449,66 @@ $
   - 弹入弹出: $ A_(p q) -> a A_(r s) b $
 
 
+= 上下文无关语言 (CFL) 
+== 定义
+使用上下文无关文法 (CFG) 所生成的语言称为 *上下文无关语言* (Context-Free Language, *CFL*). 也就是说, 如果存在一个 CFG $G$ 使得 $L = L(G)$, 则称 $L$ 是一个 CFL.
+
+== CFL 的泵引理
+类似于正则语言的泵引理, 上下文无关语言 (CFL) 也有自己的泵引理. 它描述了 CFL 的一个重要性质, 即对于任何足够长的字符串, 都可以将其分解为五个部分, 并通过重复某些部分来生成新的字符串, 而这些新字符串仍然属于同一语言.
+
+设 $L$ 是一个上下文无关语言, 则存在一个整数 $p >= 1$, 使得对于任意字符串 $s in L$ 且 $|s| >= p$, 都可以将 $s$ 分解为五个部分 $s = u v x y z$, 满足以下条件:
+1. $forall i >0, u v^i x y^i z in L$
+2. $|v y| >= 1$
+3. $|v x y| <= p$
+
+== CFL 的封闭性
+上下文无关语言 (CFL) 在以下操作下是封闭的:
+1. *并运算* (Union): 如果 $L_1$ 和 $L_2$ 是 CFL, 则 $L_1 union L_2$ 也是 CFL.
+2. *连接运算* (Concatenation): 如果 $L_1$ 和 $L_2$ 是 CFL, 则 $L_1 dot.c L_2$ 也是 CFL.
+3. *克林闭包* (Kleene Star): 如果 $L$ 是 CFL, 则 $L^*$ 也是 CFL.
+4. *反转* (Reversal): 如果 $L$ 是 CFL, 则 $L^R = { w^R | w in L }$ 也是 CFL.
+
+注意, CFL 在交运算 (Intersection) 和补运算 (Complementation) 下并不封闭. 但是, 对于一个 CFL $L$ 和一个正则语言 $R$, 它们的交集 $L inter R$ 仍然是 CFL.
+
+== DPDA 及其语言
+一个 PDA 被称为 *确定性下推自动机* (Deterministic Pushdown Automaton, *DPDA*), 如果对于任意状态 $q in Q$, 输入符号 $a in Sigma union { epsilon }$, 栈顶符号 $X in Gamma$, 都满足以下条件:
+1. $| delta( q, a, X ) | <= 1$
+2. 如果 $delta( q, epsilon, X ) != emptyset$, 则 $delta( q, a, X ) = emptyset$ 对于所有 $a in Sigma$
+
+也就是说, DPDA 在任何时刻最多只能有一个可能的转移, 并且不能同时有空移动和非空移动的选择.
+
+同时, 一个语言被称为 *确定性上下文无关语言* (Deterministic Context-Free Language, *DCFL*), 如果存在一个 DPDA $M$ 使得 $L = L(M)$.
+
+需要注意的是, DPDA 的表达能力严格弱于 NPDA, 这和 DFA 和 NFA 之间的关系不同. 也就是说, 存在一些 CFL 不能被任何 DPDA 所识别. 因此, DCFL 是 CFL 的一个真子集.
+
+== 描述 DCFL 的文法
+已知 CFG 能够描述所有的 CFL, 也就能描述所有的 DCFL. 但是由于 DCFL 的特殊性, 我们希望能给 CFG 提供一些额外的约束条件, 来满足
+- 这种受限的 CFG 还可以生成所有的 DCFL (或尽可能表达更多的 DCFL)
+- 这种受限的 CFG 可以被更高效地解析 (@parsing)
+
+=== 简单文法
+
+我们之前提出过 *简单文法* (s-grammar), 它的所有产生式都满足如下形式
+$
+  A -> a x
+$
+其中 $A in V, a in T, x in V^*$ 且 $(A, a)$ 在产生式 $P$ 中至多出现一次. 这种文法在自顶向下解析时, 只要看到当前输入符号 $a$, 就能唯一确定使用哪一个产生式. 这种性质保证了解析过程是确定的、无回溯的. 但它的表达能力太弱, 无法描述大多数实际编程语言的语法结构.
+
+=== LL($k$) 文法
+LL($k$) 文法是比简单文法更强大的一类文法. 它们允许在选择产生式时, 查看接下来的 $k$ 个输入符号, 从而做出更明智的决策. 具体来说, 一个 CFG $G = ( V, T, P, S )$ 被称为 LL($k$) 文法, 如果对于任意两个最左派生序列
+$
+  A =>_(G^*) w A x_1 =>_G w y_1 x_1 =>_(G^*) w w_1 \
+  A =>_(G^*) w A x_2 =>_G w y_2 x_2 =>_(G^*) w w_2
+$
+其中
+- $w, w_1, w_2 in T^*$ 是终结符串
+- $x_1, x_2 in ( V union T )^*$ 
+- $A -> y_1, A -> y_2 in P$ 是产生式
+只要 $w_1$ 和 $w_2$ 的前 $k$ 个符号相同, 则 $y_1 = y_2$. 也就是说, 在任何给定的解析状态下, 通过查看接下来的 $k$ 个输入符号, 都能唯一确定使用哪一个产生式.
+
+LL($k$) 文法相比简单文法, 能够描述更多的语言结构, 包括一些常见的编程语言语法. 但是, 它们仍然无法描述所有的 DCFL. 这些文法的表达能力如下面的包含关系所示:
+$
+  "s-grammar" subset "LL"(1) subset "LL"(2) subset dots.c subset "DCFL" subset "CFL"
+$
+
+= 图灵机 (Turing Machine)
