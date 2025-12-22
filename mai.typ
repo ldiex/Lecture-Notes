@@ -2459,3 +2459,101 @@ $
   L_sigma (x, lambda, mu) = f(x) & + sum_(i in cal(E)) [lambda_i c_i (x) + sigma / 2 c_i^2 (x)] \
                                  & + 1 / (2 sigma) sum_(i in cal(I)) ([max(0, mu_i + sigma c_i (x))]^2 - mu_i^2)
 $
+
+= 交替方向乘子法 (ADMM)
+== 可分离的耦合约束
+ADMM 主要用于解决具有如下特殊结构的*凸*优化问题
+$
+  min_(x_1, x_2) quad & f_1(x_1) + f_2(x_2) \
+          "s.t." quad & A_1 x_1 + A_2 x_2 = b
+$
+其中 $f_1$ 和 $f_2$ 分别是 $x_1$ 和 $x_2$ 的凸函数, $A_1$ 和 $A_2$ 分别是 $x_1$ 和 $x_2$ 的线性约束矩阵.
+
+这里目标函数是可以分离变量的, 但是约束条件中两个变量却耦合在一起.
+
+许多重要的优化模型都可以转化为 ADMM 的标准形式.
+
+*全局一致性问题*
+$
+  "Original Form": quad min_x quad sum_(i = 1)^N phi_i (x)
+$
+$
+  "ADMM Form": quad min_(x_i, z) & sum_(i = 1)^N phi_i (x_i) \
+                          "s.t." & x_i - z = 0, quad i = 1, ..., N
+$
+这里每一个 $x_i$ 都可以被分布式地处理, 但是全局约束 $x_i = z$ 能够保证所有局部解最终达成一致.
+
+*一般约束优化问题*
+$
+  "Original Form": quad min_x quad f(x) quad "s.t." A x in C
+$
+
+
+$
+  "ADMM Form": quad min_x quad f(x) + I_C (z) quad "s.t." A x = z
+$
+
+== ALM 的问题
+对可分离的耦合约束形式, 如果我们还是采用 ALM 方法:
+$
+  L_rho (x_1, x_2, y) = f_1 (x_1) + f_2 (x_2) + y^T (A_1 x_1 + A_2 x_2 - b) \
+  + rho / 2 norm(A_1 x_1 + A_2 x_2 - b)_2^2
+$
+前面的优化目标和线性乘子项都可以分离变量, 但是二次罚函数项则把 $x_1$ 和 $x_2$ 耦合在一起, 如果按照 ALM 整体优化的方式, 没法很好地利用 $x_1$ 和 $x_2$ 的分离性.
+
+== ADMM 算法
+ADMM 的核心思想是 *交替* 地最小化增广 Lagrangian 函数. 它的迭代步如下:
+$
+  cases(
+    x_1^(k+1) & = arg min_(x_1) L_rho (x_1, x_2^k, y^k),
+    x_2^(k+1) & = arg min_(x_2) L_rho (x_1^(k+1), x_2, y^k),
+    y^(k+1) & = y^k + rho (A_1 x_1^(k+1) + A_2 x_2^(k+1) - b)
+  )
+$
+与 ALM 不同, ADMM 在更新 $x_2$ 时使用了已经更新过的 $x_1^(k+1)$, 这种 Gauss-Seidel 方式的更新使得子问题在很多情况下可以解耦.
+
+#algorithm-figure(
+  "ADMM 算法",
+  vstroke: .5pt + luma(200),
+  inset: 0.4em,
+  {
+    import algorithmic: *
+    Procedure(
+      "ADMM",
+      ($x_2^0, y^0, rho > 0$),
+      {
+        For(
+          $k = 0, 1, 2, ...$,
+          {
+            Assign[$x_1^(k + 1)$][$arg min_(x_1) L_rho (x_1, x_2^k, y^k)$]
+            Assign[$x_2^(k + 1)$][$arg min_(x_2) L_rho (x_1^(k + 1), x_2, y^k)$]
+            Assign[$y^(k + 1)$][$y^k + rho (A_1 x_1^(k + 1) + A_2 x_2^(k + 1) - b)$]
+
+            LineBreak
+            If(
+              "满足收敛准则",
+              {
+                Return[$x_1^(k + 1), x_2^(k + 1)$]
+              },
+            )
+          },
+        )
+      },
+    )
+  },
+)
+
+== Scaled ADMM
+我们可以通过合并 $L_rho$ 中的线性和二次项, 配方得到
+$
+  y^T (A x - b) + rho / 2 norm(A x - b)_2^2 = rho/2 norm(A x - b + y / rho)_2^2 - 1 / (2 rho) norm(y)_2^2
+$
+我们定义 *缩放对偶变量* $u = 1 / rho y$, 则迭代步可以简化为
+$
+  cases(
+    x_1^(k + 1) & = arg min_(x_1) (f_1 (x_1) + rho / 2 norm(A_1 x_1 + A_2 x_2^k - b + u^k)_2^2),
+    x_2^(k + 1) & = arg min_(x_2) (f_2 (x_2) + rho / 2 norm(A_1 x_1^(k + 1) + A_2 x_2 - b + u^k)_2^2),
+    u^(k + 1) & = u^k + A_1 x_1^(k + 1) + A_2 x_2^(k + 1) - b
+  )
+$
+这种形式消去了显式的对偶变量 $y$, 在实现和计算残差时更为简洁.
