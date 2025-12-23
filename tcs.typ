@@ -5,6 +5,7 @@
 #import "@preview/tdtr:0.3.0": *
 #import "@preview/algorithmic:1.0.6"
 #import algorithmic: algorithm-figure, style-algorithm
+#import "@preview/fletcher:0.5.8" as fletcher: diagram, node, edge
 
 #show: style-algorithm
 
@@ -1794,10 +1795,102 @@ CFG 的派生性问题先要把它转化为 CNF, 这样每一步推导都会增�
 *可判定和图灵可识别语言的封闭性* \
 *图灵可识别语言 (Turing-Recognizable Languages)* 是由识别器识别的语言. 识别器在接受输入时停机, 但在拒绝输入时可能会进入无限循环.
 1. 图灵可识别语言类对并运算和交运算封闭
-2. 图灵可识别语言类不一定对补运算封闭. 一个语言 $A$ 是可判定的 (比可识别更强), 当前仅当 $A$ 和其补语言 $bar(A)$ 都是图灵可识别的.
+2. 图灵可识别语言类不一定对补运算封闭. 一个语言 $A$ 是可判定的 (比可识别更强), 当前仅当 $A$ 和其补语言 $macron(A)$ 都是图灵可识别的.
 
+== 不可判定性
+*图灵接受性问题* ($A_"TM"$) 定义为检测一个图灵机 $M$ 是否接受输入串 $w$:
+$
+  A_"TM" = { angle.l M, w angle.r | "TM" M "accepts" w }
+$
+图灵接受性问题是 *图灵可识别的*, 但 *不可判定的*. 也就是说, 存在一个识别器能接受所有属于 $A_"TM"$ 的输入, 但不存在一个判定器能对所有输入都停机并正确判断是否属于 $A_"TM"$.
 
+我们可以将所有可能的图灵机看作是一系列有限符号的排列组合. 由于每台图灵机的描述 (状态转移函数, 字母表等) 都可以编码成一个有限长的字符串, 而所有有限长字符串构成的集合 $Sigma^*$ 是可数无穷的. 这意味着, 我们可以将世界上所有可能的算法从 1 开始编号, 排成一个序列. 图灵机的集合是可数的, 其基数记作 $aleph_0$.
 
+但是对于语言的集合, 情况就不同了. 语言是字符串的集合, 而字符串本身已经是 $Sigma^*$ 的子集. 根据康托尔对角线论证法, 所有子集的集合 (即幂集 $cal(P)(Sigma^*)$) 的基数严格大于原集合的基数. 因此, 语言的集合是不可数的, 其基数为 $2^(aleph_0)$.
 
+这意味着, 语言的数量远远多于图灵机的数量. 从基数的角度看, 绝大多数语言甚至根本无法被任何图灵机识别.
 
+== 语言理论中的不可判定问题
+=== 归约
+归约 (Reduction) 是计算理论中一种重要的技术, 用于证明某些问题的不可判定性. 如果我们要解决问题 $A$, 只需要解决问题 $B$ 并且能够将 $A$ 转化为 $B$, 那么我们称问题 $A$ *归约* 到问题 $B$.
+
+那么, 如果问题 $A$ 能归约到问题 $B$, 且问题 $A$ 是不可判定的, 那么问题 $B$ 也必然是不可判定的. 因为如果问题 $B$ 是可判定的, 那么我们就可以通过归约来解决问题 $A$, 这与 $A$ 的不可判定性矛盾.
+
+=== 图灵停机问题
+图灵停机问题 (Halting Problem) 是计算理论中最著名的不可判定问题之一. 它可以表述为: 给定一个图灵机 $M$ 和一个输入串 $w$, 判断 $M$ 在输入 $w$ 上是否会停机 (即进入接受或拒绝状态).
+
+由于图灵接受性问题 $A_"TM"$ 已经被证明是不可判定的, 我们可以通过归约来证明图灵停机问题也是不可判定的. 具体来说, 如果我们有一个假设的停机问题判定器 $H$, 它能够判断任意图灵机 $M$ 在输入 $w$ 上是否停机, 那么我们就可以构造一个接受性问题的判定器 $D$:
+1. 给定输入 $angle.l M, w angle.r$, 运行停机判定器 $H$ 来检查 $M$ 在输入 $w$ 上是否停机.
+2. 如果 $H$ 判定 $M$ 会停机, 则运行 $M$ 在输入 $w$ 上的计算:
+   - 如果 $M$ 接受 $w$, 则 $D$ 接受 $angle.l M, w angle.r$.
+   - 如果 $M$ 拒绝 $w$, 则 $D$ 拒绝 $angle.l M, w angle.r$.
+3. 如果 $H$ 判定 $M$ 不会停机, 则 $D$ 也不停机.
+这样, 如果停机问题是可判定的, 那么接受性问题也将是可判定的, 这与已知的不可判定性矛盾. 因此, 图灵停机问题也是不可判定的.
+
+=== 图灵空性问题
+类似地, 我们可以定义图灵空性问题 (Turing Emptiness Problem) 为: 给定一个图灵机 $M$, 判断 $L(M) = emptyset$ 是否成立. 图灵接受性问题也可以被归约到图灵空性问题, 从而证明图灵空性问题也是不可判定的.
+
+具体来说, 如果我们有一个假设的空性问题判定器 $E$, 它能够判断任意图灵机 $M$ 的语言是否为空, 那么我们就可以构造一个接受性问题的判定器 $D$:
+1. 给定输入 $angle.l M, w angle.r$, 构造一个新的图灵机 $M'$:
+   - $M'$ 在输入 $x$ 上的行为是: 如果 $x = w$, 则运行 $M$ 在输入 $w$ 上的计算; 否则拒绝 $x$.
+2. 运行空性判定器 $E$ 来检查 $L(M')$ 是否为空:
+   - 如果 $E$ 判定 $L(M') = emptyset$, 则 $D$ 拒绝 $angle.l M, w angle.r$.
+   - 如果 $E$ 判定 $L(M') != emptyset$, 则 $D$ 接受 $angle.l M, w angle.r$.
+通过这种方式, 如果空性问题是可判定的, 那么接受性问题也将是可判定的, 这与已知的不可判定性矛盾. 因此, 图灵空性问题也是不可判定的.
+
+=== 图灵等价性问题
+图灵空性问题可以归约到图灵等价性问题 (Turing Equivalence Problem), 从而证明图灵等价性问题也是不可判定的. 图灵等价性问题定义为: 给定两个图灵机 $M_1$ 和 $M_2$, 判断 $L(M_1) = L(M_2)$ 是否成立.
+
+假设我们有一个等价性问题的判定器 $Q$, 它能够判断任意两个图灵机 $M_1$ 和 $M_2$ 的语言是否相等. 那么我们就可以构造一个空性问题的判定器 $E$:
+1. 给定输入 $M$, 构造一个新的图灵机 $M_0$:
+   - $M_0$ 在任何输入上都拒绝.
+2. 运行等价性判定器 $Q$ 来检查 $L(M)$ 是否等于 $L(M_0)$:
+   - 如果 $Q$ 判定 $L(M) = L(M_0)$, 则 $E$ 判定 $L(M) = emptyset$.
+   - 如果 $Q$ 判定 $L(M) != L(M_0)$, 则 $E$ 判定 $L(M) != emptyset$.
+所以, 如果等价性问题是可判定的, 那么空性问题也将是可判定的, 这与已知的不可判定性矛盾. 因此, 图灵等价性问题也是不可判定的.
+
+总结一下:
+#figure(
+  align(center)[#table(
+    columns: (auto, auto, auto, auto),
+    table.header([*问题类型*], [*DFA*], [*CFG*], [*TM*]),
+    table.hline(),
+    [接受性问题], [可判定 $checkmark$], [可判定 $checkmark$], [不可判定 $crossmark.heavy$],
+    [空性问题], [可判定 $checkmark$], [可判定 $checkmark$], [不可判定 $crossmark.heavy$],
+    [等价性问题], [可判定 $checkmark$], [不可判定 $crossmark.heavy$], [不可判定 $crossmark.heavy$],
+  )],
+)
+
+#figure(
+  diagram(
+    node-corner-radius: 4pt,
+    
+    // --- 1. 定义节点网格 (Grid Layout) ---
+    // 纵坐标 y: 0=TM(最难), 1=CFG(中间), 2=DFA(最易)
+    // 横坐标 x: 0=Acceptance, 1=Halt/Special, 2=Emptiness, 3=Equivalence
+    
+    node((0,0), $A_"TM"$, name: <Atm>, stroke: red),
+    node((1,0), $H_"TM"$, name: <Htm>, stroke: red),
+    node((2,0), $E_"TM"$, name: <Etm>, stroke: red),
+    node((3,0), $E Q_"TM"$, name: <Eqtm>, stroke: red),
+
+    node((0,1), $A_"CFG"$, name: <Acfg>),
+    node((2,1), $E_"CFG"$, name: <Ecfg>),
+    node((3,1), $E Q_"CFG"$, name: <Eqcfg>, stroke: red),
+
+    node((0,2), $A_"DFA"$, name: <Adfa>),
+    node((2,2), $E_"DFA"$, name: <Edfa>),
+    node((3,2), $E Q_"DFA"$, name: <Eqdfa>),
+
+    edge(<Adfa>, <Acfg>, "->", label: $subset$, label-side: right, stroke: gray + 0.5pt),
+    edge(<Acfg>, <Atm>, "->", label: $subset$, label-side: right, stroke: gray + 0.5pt),
+    
+    edge(<Atm>, <Htm>, "->"),
+    edge(<Atm>, <Etm>, "->", bend: 20deg),
+    edge(<Etm>, <Eqtm>, "->"),
+
+    edge(<Adfa>, <Edfa>, "->", bend: 20deg, stroke: green),
+    edge(<Edfa>, <Eqdfa>, "->", bend: 20deg, stroke: green),
+  )
+)
 
