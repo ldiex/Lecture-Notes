@@ -15,7 +15,7 @@
 }
 
 #show: ilm.with(
-  title: [Final Review for _Mathematiccal Foundations of AI_],
+  title: [Final Review for _Mathematical Foundations of AI_],
   date: datetime.today(),
   author: "潘天麟 2023K8009908023",
   table-of-contents: none,
@@ -35,6 +35,71 @@
 
 #let colMath(x, color) = text(fill: color)[$#x$]
 
+
+= 需要记忆的
+#showybox(
+  title: [$ell_1, ell_2, ell_oo$ 范数的次梯度],
+  frame: frameSettings,
+)[
+  $ell_1$ 是 $x_i$ 可分离的
+  $
+    partial norm(x)_1 = { g | g_i = f(x_i)}
+  $
+  其中
+  $
+    f(x_i) = cases(
+      1 \, & "if" x_i > 0,
+      -1 \, & "if" x_i < 0,
+      [-1, 1] \, & "if" x_i = 0
+    )
+  $
+
+  $ell_2$ 在非零点可微
+  $
+    partial norm(x)_2 = { x / norm(x)_2 }
+  $
+  在零点的次梯度是对应的对偶范数单位球 ($ell_2$ 是自对偶范数)
+  $
+    partial norm(0)_2 = { g | norm(g)_2 <= 1 }
+  $
+
+  $ell_oo$ 在非零点是所有激活分量的符号组成的向量的凸包. 记为 $cal(I) = { i | |x_i| = norm(x)_oo }$, 那么
+  $
+    partial norm(x)_oo = "convhull" { "sgn"(x_i) e_i | i in cal(I) }
+  $
+  这意味着它满足约束
+  $
+    forall g in partial norm(x)_oo : g^T x = norm(x)_oo, quad norm(g)_1 = 1
+  $
+  同样, $ell_oo$ 在零点的次梯度是对应的对偶范数单位球 ($ell_1$ 的单位球)
+]
+
+#showybox(
+  title: [BFGS 更新公式],
+  frame: frameSettings,
+)[
+  $
+    B_(k + 1) = B_k + (y_k y_k^T) / (y_k^T s_k) - (B_k s_k s_k^T B_k) / (s_k^T B_k s_k)
+  $
+  这里 $s_k = x_(k + 1) - x_k$, $y_k = nabla f(x_(k + 1)) - nabla f(x_k)$.
+]
+
+
+#showybox(
+  title: [LASSO 问题的换元],
+  frame: frameSettings,
+)[
+  原始形式
+  $
+    min_(x in RR^n) 1/2 norm(A x - b)_2^2 + lambda norm(x)_1
+  $
+  令 $z = A x$, 则变为
+  $
+    min_(x in RR^n \, z in RR^m) 1/2 norm(z - b)_2^2 + lambda norm(x)_1 \
+    "s.t." z = A x
+  $
+  这样它的对偶问题就比较好求.
+]
 
 = 对偶问题
 #showybox(
